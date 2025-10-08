@@ -1,0 +1,13 @@
+slides/
+exercises/*.html
+~*
+*.bak
+slides/*_cache/*
+slides/rpt_taglist.rda
+slides/*.Rmd
+index.Rmd
+.Rproj.user
+.Rhistory
+*_ans.R
+*gtag.js
+.secrets/*

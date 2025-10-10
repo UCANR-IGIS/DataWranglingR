@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Data Wrangling Exercise 2</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+<script src="ex02_group-summarize-join-pivot_ans_files/libs/clipboard/clipboard.min.js"></script>
+<script src="ex02_group-summarize-join-pivot_ans_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="ex02_group-summarize-join-pivot_ans_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="ex02_group-summarize-join-pivot_ans_files/libs/quarto-html/popper.min.js"></script>
+<script src="ex02_group-summarize-join-pivot_ans_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="ex02_group-summarize-join-pivot_ans_files/libs/quarto-html/anchor.min.js"></script>
+<link href="ex02_group-summarize-join-pivot_ans_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="ex02_group-summarize-join-pivot_ans_files/libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="ex02_group-summarize-join-pivot_ans_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="ex02_group-summarize-join-pivot_ans_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="ex02_group-summarize-join-pivot_ans_files/libs/bootstrap/bootstrap-bb462d781dde1847d9e3ccf7736099dd.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><link href="ex02_group-summarize-join-pivot_ans_files/libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+<script src="ex02_group-summarize-join-pivot_ans_files/libs/pagedtable-1.1/js/pagedtable.js"></script>
+</head>
+<body class="quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="3"><h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+<li><a href="#setup" id="toc-setup" class="nav-link active" data-scroll-target="#setup">Setup</a></li>
+  <li>
+<a href="#group-and-summarize" id="toc-group-and-summarize" class="nav-link" data-scroll-target="#group-and-summarize">Group and Summarize</a>
+  <ul class="collapse">
+<li><a href="#challenge" id="toc-challenge" class="nav-link" data-scroll-target="#challenge">CHALLENGE</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#group-on-multiple-columns" id="toc-group-on-multiple-columns" class="nav-link" data-scroll-target="#group-on-multiple-columns">Group on Multiple Columns</a>
+  <ul class="collapse">
+<li><a href="#challenge-1" id="toc-challenge-1" class="nav-link" data-scroll-target="#challenge-1">CHALLENGE</a></li>
+  </ul>
+</li>
+  <li><a href="#joins" id="toc-joins" class="nav-link" data-scroll-target="#joins">Joins</a></li>
+  <li>
+<a href="#use-the-new-columns-for-summaries" id="toc-use-the-new-columns-for-summaries" class="nav-link" data-scroll-target="#use-the-new-columns-for-summaries">Use the New Columns for Summaries</a>
+  <ul class="collapse">
+<li><a href="#challenge-2" id="toc-challenge-2" class="nav-link" data-scroll-target="#challenge-2">CHALLENGE</a></li>
+  </ul>
+</li>
+  <li><a href="#reshape-the-data" id="toc-reshape-the-data" class="nav-link" data-scroll-target="#reshape-the-data">Reshape the data</a></li>
+  <li>
+<a href="#visualize-and-summarise-all-of-the-quizes" id="toc-visualize-and-summarise-all-of-the-quizes" class="nav-link" data-scroll-target="#visualize-and-summarise-all-of-the-quizes">Visualize and Summarise all of the Quizes</a>
+  <ul class="collapse">
+<li><a href="#challenge-3" id="toc-challenge-3" class="nav-link" data-scroll-target="#challenge-3">CHALLENGE</a></li>
+  </ul>
+</li>
+  <li><a href="#done" id="toc-done" class="nav-link" data-scroll-target="#done">DONE!</a></li>
+  </ul></nav>
+</div>
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
+<h1 class="title">Data Wrangling Exercise 2</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header><p>In this exercise, we’ll continue to work with the pop-quiz data using the following techiques:</p>
+<ul>
+<li>group &amp; summarize</li>
+<li>joins</li>
+<li>reshape</li>
+</ul>
+<section id="setup" class="level2"><h2 class="anchored" data-anchor-id="setup">Setup</h2>
+<p>Load the packages we’ll be using:</p>
+<div class="cell">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://readr.tidyverse.org">readr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org">tidyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://stringr.tidyverse.org">stringr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://lubridate.tidyverse.org">lubridate</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://conflicted.r-lib.org/">conflicted</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://conflicted.r-lib.org/reference/conflicts_prefer.html">conflicts_prefer</a></span><span class="op">(</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="va"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>,</span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="va"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>,</span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="va"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span></span>
+<span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We’ll continue to work with the pop-quiz data we saw in the first exercise:</p>
+<div class="cell">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ss_fn</span> <span class="op">&lt;-</span> <span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org/reference/here.html">here</a></span><span class="op">(</span><span class="st">"./exercises/data/student_scores.tsv"</span><span class="op">)</span></span>
+<span><span class="co"># file.exists(ss_fn)</span></span>
+<span><span class="va">ss_nn_tbl</span> <span class="op">&lt;-</span> <span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_tsv</a></span><span class="op">(</span>file <span class="op">=</span> <span class="va">ss_fn</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select_all.html">rename_all</a></span><span class="op">(</span><span class="va">tolower</span><span class="op">)</span> <span class="op">|&gt;</span>                       </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select_all.html">rename_all</a></span><span class="op">(</span><span class="op">~</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_replace.html">str_replace_all</a></span><span class="op">(</span><span class="va">.</span>, <span class="st">" "</span>, <span class="st">"_"</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 100 Columns: 25
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: "\t"
+chr  (6): Name, Sex, Height, Section, Treatment, Major
+dbl (19): Year, Quiz 01, Quiz 02, Quiz 03, Quiz 04, Quiz 05, Quiz 06, Quiz 0...
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">ss_nn_tbl</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["name"],"name":[1],"type":["chr"],"align":["left"]},{"label":["sex"],"name":[2],"type":["chr"],"align":["left"]},{"label":["height"],"name":[3],"type":["chr"],"align":["left"]},{"label":["section"],"name":[4],"type":["chr"],"align":["left"]},{"label":["treatment"],"name":[5],"type":["chr"],"align":["left"]},{"label":["major"],"name":[6],"type":["chr"],"align":["left"]},{"label":["year"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["quiz_01"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["quiz_02"],"name":[9],"type":["dbl"],"align":["right"]},{"label":["quiz_03"],"name":[10],"type":["dbl"],"align":["right"]},{"label":["quiz_04"],"name":[11],"type":["dbl"],"align":["right"]},{"label":["quiz_05"],"name":[12],"type":["dbl"],"align":["right"]},{"label":["quiz_06"],"name":[13],"type":["dbl"],"align":["right"]},{"label":["quiz_07"],"name":[14],"type":["dbl"],"align":["right"]},{"label":["quiz_08"],"name":[15],"type":["dbl"],"align":["right"]},{"label":["quiz_09"],"name":[16],"type":["dbl"],"align":["right"]},{"label":["quiz_10"],"name":[17],"type":["dbl"],"align":["right"]},{"label":["quiz_11"],"name":[18],"type":["dbl"],"align":["right"]},{"label":["quiz_12"],"name":[19],"type":["dbl"],"align":["right"]},{"label":["quiz_13"],"name":[20],"type":["dbl"],"align":["right"]},{"label":["quiz_14"],"name":[21],"type":["dbl"],"align":["right"]},{"label":["quiz_15"],"name":[22],"type":["dbl"],"align":["right"]},{"label":["quiz_16"],"name":[23],"type":["dbl"],"align":["right"]},{"label":["quiz_17"],"name":[24],"type":["dbl"],"align":["right"]},{"label":["quiz_18"],"name":[25],"type":["dbl"],"align":["right"]}],"data":[{"1":"Abeyta, Syssy","2":"female","3":"165.5 cm","4":"Section 1","5":"treatment 2","6":"Biology","7":"4","8":"89","9":"100","10":"95","11":"98","12":"96","13":"85","14":"NA","15":"100","16":"90","17":"99","18":"NA","19":"100","20":"98","21":"NA","22":"100","23":"99","24":"100","25":"NA"},{"1":"Acosta, Tanisa","2":"female","3":"200.4 cm","4":"Section 1","5":"treatment 2","6":"Data Science, History, Biology","7":"3","8":"100","9":"NA","10":"100","11":"100","12":"100","13":"94","14":"70","15":"90","16":"100","17":"NA","18":"100","19":"100","20":"100","21":"97","22":"100","23":"100","24":"87","25":"100"},{"1":"Agyepong, Shardae","2":"female","3":"62.3 in","4":"Section 2","5":"treatment 2","6":"English","7":"3","8":"NA","9":"50","10":"77","11":"76","12":"72","13":"NA","14":"49","15":"76","16":"77","17":"74","18":"78","19":"78","20":"76","21":"NA","22":"78","23":"59","24":"NA","25":"NA"},{"1":"Apodaca, Stephanie","2":"female","3":"61.7 in","4":"Section 2","5":"control","6":"Sociology","7":"3","8":"73","9":"77","10":"74","11":"73","12":"76","13":"71","14":"51","15":"70","16":"71","17":"87","18":"87","19":"69","20":"75","21":"78","22":"64","23":"77","24":"76","25":"84"},{"1":"Arnold, Briahna","2":"female","3":"55 in","4":"Section 3","5":"control","6":"Sociology","7":"3","8":"NA","9":"86","10":"79","11":"NA","12":"75","13":"78","14":"51","15":"91","16":"78","17":"78","18":"74","19":"NA","20":"69","21":"75","22":"70","23":"89","24":"65","25":"68"},{"1":"Astorga, Esperanza","2":"female","3":"172.7 cm","4":"Section 3","5":"treatment 1","6":"Biology","7":"4","8":"90","9":"74","10":"83","11":"76","12":"86","13":"88","14":"48","15":"87","16":"79","17":"85","18":"87","19":"NA","20":"77","21":"89","22":"NA","23":"87","24":"NA","25":"85"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+</section><section id="group-and-summarize" class="level2"><h2 class="anchored" data-anchor-id="group-and-summarize">Group and Summarize</h2>
+<p>For this section, we’ll work with the first quiz only:</p>
+<div class="cell">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ss_q1_tbl</span> <span class="op">&lt;-</span> <span class="va">ss_nn_tbl</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">name</span>, <span class="va">section</span>, <span class="va">treatment</span>, <span class="va">quiz_01</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s compute the number of students per section. We start by grouping the rows by section:</p>
+<div class="cell">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ss_q1_tbl</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">section</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["name"],"name":[1],"type":["chr"],"align":["left"]},{"label":["section"],"name":[2],"type":["chr"],"align":["left"]},{"label":["treatment"],"name":[3],"type":["chr"],"align":["left"]},{"label":["quiz_01"],"name":[4],"type":["dbl"],"align":["right"]}],"data":[{"1":"Abeyta, Syssy","2":"Section 1","3":"treatment 2","4":"89"},{"1":"Acosta, Tanisa","2":"Section 1","3":"treatment 2","4":"100"},{"1":"Agyepong, Shardae","2":"Section 2","3":"treatment 2","4":"NA"},{"1":"Apodaca, Stephanie","2":"Section 2","3":"control","4":"73"},{"1":"Arnold, Briahna","2":"Section 3","3":"control","4":"NA"},{"1":"Astorga, Esperanza","2":"Section 3","3":"treatment 1","4":"90"},{"1":"Atwell, Sheridan","2":"Section 1","3":"treatment 2","4":"92"},{"1":"Avis, Adrian","2":"Section 3","3":"treatment 1","4":"72"},{"1":"Axalan, Teriuse","2":"Section 3","3":"treatment 1","4":"62"},{"1":"Bailey, Zackery","2":"Section 2","3":"treatment 2","4":"90"},{"1":"Bang, Nam","2":"Section 3","3":"control","4":"77"},{"1":"Bayar, Mina","2":"Section 2","3":"control","4":"88"},{"1":"Beck, Emma","2":"Section 4","3":"treatment 2","4":"86"},{"1":"Begaye, Erik","2":"Section 2","3":"treatment 1","4":"75"},{"1":"Bernhardt, Mackenzy","2":"Section 2","3":"treatment 1","4":"84"},{"1":"Boaman, Matthew","2":"Section 2","3":"treatment 1","4":"89"},{"1":"Bohnert, Sheila","2":"Section 4","3":"treatment 2","4":"100"},{"1":"Bol, Anay","2":"Section 3","3":"treatment 2","4":"86"},{"1":"Bunch, Marcus","2":"Section 1","3":"control","4":"95"},{"1":"Chavez, Sonja","2":"Section 4","3":"treatment 2","4":"99"},{"1":"Chhay, Kaleb","2":"Section 4","3":"control","4":"89"},{"1":"Chou, Huy","2":"Section 3","3":"treatment 1","4":"65"},{"1":"Christian, Ayla","2":"Section 2","3":"control","4":"65"},{"1":"Colbert, Marinah","2":"Section 1","3":"control","4":"81"},{"1":"Conners, Alyssa","2":"Section 2","3":"treatment 2","4":"82"},{"1":"Cruz, Alexander","2":"Section 3","3":"treatment 2","4":"76"},{"1":"Fletcher-Pettis, Elidi","2":"Section 2","3":"treatment 1","4":"NA"},{"1":"Garcia, Alejandro","2":"Section 2","3":"control","4":"84"},{"1":"Garcia, Francisco","2":"Section 1","3":"treatment 2","4":"78"},{"1":"Guardipee, Monica","2":"Section 1","3":"treatment 2","4":"NA"},{"1":"Gustamantos, Xochitl","2":"Section 4","3":"treatment 1","4":"73"},{"1":"Hennig, Lauren","2":"Section 1","3":"treatment 1","4":"89"},{"1":"Hernandez, Christopher","2":"Section 1","3":"treatment 1","4":"81"},{"1":"Herndon, Joshua","2":"Section 2","3":"treatment 2","4":"NA"},{"1":"Hicks Sims, Joseph","2":"Section 2","3":"treatment 2","4":"100"},{"1":"Hill, Alyssa","2":"Section 1","3":"control","4":"75"},{"1":"Hobbs, Antonia","2":"Section 2","3":"treatment 2","4":"76"},{"1":"Hoey, Keaton","2":"Section 2","3":"treatment 1","4":"89"},{"1":"Holiday, Tyra","2":"Section 4","3":"treatment 1","4":"97"},{"1":"Holmes, Aundrey","2":"Section 3","3":"treatment 1","4":"82"},{"1":"Jensen, Jacob","2":"Section 3","3":"treatment 2","4":"81"},{"1":"Jones, Timothy","2":"Section 2","3":"control","4":"76"},{"1":"Koch, Rachael","2":"Section 4","3":"control","4":"90"},{"1":"Landrum, Stephany","2":"Section 3","3":"treatment 1","4":"81"},{"1":"Langer, Lovell","2":"Section 4","3":"treatment 1","4":"66"},{"1":"Lorenzo, Jamillia","2":"Section 2","3":"control","4":"82"},{"1":"Loyd, Monica","2":"Section 3","3":"control","4":"82"},{"1":"Luftig, Sunjot","2":"Section 2","3":"treatment 1","4":"NA"},{"1":"Marshall, Lakota","2":"Section 2","3":"treatment 2","4":"79"},{"1":"Martinez, Emileo","2":"Section 3","3":"treatment 1","4":"40"},{"1":"Martinez, Tania","2":"Section 3","3":"control","4":"NA"},{"1":"Martzloff, Jaime","2":"Section 1","3":"treatment 1","4":"77"},{"1":"Meharzi, Rachel","2":"Section 1","3":"treatment 2","4":"57"},{"1":"Mekonnen, Odessey","2":"Section 1","3":"treatment 2","4":"NA"},{"1":"Motz, Logan","2":"Section 4","3":"control","4":"67"},{"1":"Munoz-Beltran, Lorenzo","2":"Section 1","3":"treatment 2","4":"100"},{"1":"Newell, Nicole","2":"Section 2","3":"treatment 1","4":"76"},{"1":"Nguyen, Liny","2":"Section 3","3":"control","4":"NA"},{"1":"Nguyen, Peter","2":"Section 3","3":"treatment 2","4":"NA"},{"1":"Nunley, Patrick","2":"Section 1","3":"control","4":"81"},{"1":"Peterson, Miles","2":"Section 4","3":"control","4":"76"},{"1":"Ponce, Cody","2":"Section 1","3":"treatment 1","4":"92"},{"1":"Rice, Scott","2":"Section 3","3":"treatment 2","4":"88"},{"1":"Rose, Nickolas","2":"Section 1","3":"control","4":"NA"},{"1":"Roundy, Victoria","2":"Section 3","3":"treatment 1","4":"NA"},{"1":"Salcido-Mata, Tyler","2":"Section 2","3":"treatment 1","4":"72"},{"1":"Santillano, Nancy","2":"Section 1","3":"treatment 1","4":"74"},{"1":"Sena-Opdyke, Edgar","2":"Section 2","3":"control","4":"NA"},{"1":"Seo, Shengh","2":"Section 2","3":"treatment 2","4":"88"},{"1":"Shen, Angelique","2":"Section 3","3":"control","4":"93"},{"1":"Son, Morgan","2":"Section 1","3":"treatment 1","4":"NA"},{"1":"Stevens, Otis","2":"Section 3","3":"control","4":"80"},{"1":"Stroh, Antoinette","2":"Section 4","3":"treatment 1","4":"86"},{"1":"Stufflebean, Michael","2":"Section 1","3":"treatment 2","4":"100"},{"1":"Thao, Qing","2":"Section 1","3":"control","4":"92"},{"1":"Tohtsonie, Kawehi","2":"Section 1","3":"treatment 2","4":"100"},{"1":"Torres, Lucas","2":"Section 2","3":"control","4":"75"},{"1":"Trammell, Nykia","2":"Section 1","3":"treatment 1","4":"78"},{"1":"Turner, Ta'Lor Rae","2":"Section 1","3":"control","4":"NA"},{"1":"Walker, Jalessa","2":"Section 4","3":"treatment 1","4":"NA"},{"1":"Walton IV, Jha Nae","2":"Section 2","3":"treatment 2","4":"97"},{"1":"Wescott, Parker","2":"Section 3","3":"control","4":"66"},{"1":"Wilson, Ty","2":"Section 1","3":"treatment 2","4":"84"},{"1":"Winter, Joseph","2":"Section 4","3":"treatment 1","4":"86"},{"1":"Wong, Margaret","2":"Section 4","3":"treatment 2","4":"87"},{"1":"Yang, Jason","2":"Section 3","3":"control","4":"51"},{"1":"Zinser, Taylor","2":"Section 2","3":"treatment 1","4":"67"},{"1":"al-Aly, Rahma","2":"Section 3","3":"treatment 2","4":"100"},{"1":"al-Hamady, Abbaad","2":"Section 3","3":"treatment 1","4":"NA"},{"1":"al-Shaban, Mashal","2":"Section 4","3":"treatment 2","4":"86"},{"1":"el-Allam, Afeefa","2":"Section 1","3":"control","4":"NA"},{"1":"el-Dallal, Nawfal","2":"Section 3","3":"treatment 1","4":"73"},{"1":"el-Hamed, Safiyya","2":"Section 2","3":"treatment 1","4":"92"},{"1":"el-Lone, Rida","2":"Section 1","3":"treatment 1","4":"96"},{"1":"el-Mostafa, Widdad","2":"Section 4","3":"control","4":"84"},{"1":"el-Salem, Mastoora","2":"Section 1","3":"control","4":"NA"},{"1":"el-Shahan, Abdul Khaliq","2":"Section 1","3":"treatment 2","4":"NA"},{"1":"el-Shaheed, Shawqi","2":"Section 4","3":"control","4":"86"},{"1":"el-Shaker, Kaazima","2":"Section 4","3":"control","4":"70"},{"1":"el-Zaidi, Muneef","2":"Section 4","3":"treatment 2","4":"63"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+<p><strong>Note:</strong> Simply grouping rows with <code><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by()</a></code> doesn’t do anything useful!</p>
+<p>You have to follow it up with something else (usually <code><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize()</a></code>).</p>
+<p>To count the number of rows per group, we can define a new column using <code><a href="https://dplyr.tidyverse.org/reference/context.html">n()</a></code>.</p>
+<div class="cell">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ss_q1_tbl</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">section</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span>num_students <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["section"],"name":[1],"type":["chr"],"align":["left"]},{"label":["num_students"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"Section 1","2":"29"},{"1":"Section 2","2":"27"},{"1":"Section 3","2":"25"},{"1":"Section 4","2":"19"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Functions you can use in <code><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize()</a></code>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>What gets fed into <code><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize()</a></code> are groups of rows (one at a time).</p>
+<p>Hence, when you define columns in <code><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize()</a></code>, you have to use functions that can receive multiple values and return just one (i.e., aggregate functions). Common examples include <code><a href="https://dplyr.tidyverse.org/reference/context.html">n()</a></code>, <code><a href="https://rdrr.io/r/base/mean.html">mean()</a></code>, <code><a href="https://rdrr.io/r/base/sum.html">sum()</a></code>, <code><a href="https://rdrr.io/r/base/Extremes.html">max()</a></code>, <code><a href="https://dplyr.tidyverse.org/reference/nth.html">first()</a></code>, etc.</p>
+</div>
+</div>
+<p><br></p>
+<p>Next, compute the average score on Quiz 1 by section:</p>
+<div class="cell">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ss_q1_tbl</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">section</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span>quiz_01_avg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">quiz_01</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["section"],"name":[1],"type":["chr"],"align":["left"]},{"label":["quiz_01_avg"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"Section 1","2":"86.23810"},{"1":"Section 2","2":"81.77273"},{"1":"Section 3","2":"76.05263"},{"1":"Section 4","2":"82.83333"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+<section id="challenge" class="level3"><h3 class="anchored" data-anchor-id="challenge">CHALLENGE</h3>
+<ol type="1">
+<li>Compute the average score on Quiz 1 by treatment group.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ss_q1_tbl</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">treatment</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span>quiz_01_avg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">quiz_01</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["treatment"],"name":[1],"type":["chr"],"align":["left"]},{"label":["quiz_01_avg"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"control","2":"79.12000"},{"1":"treatment 1","2":"78.71429"},{"1":"treatment 2","2":"87.55556"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+<p><br></p>
+</section></section><section id="group-on-multiple-columns" class="level2"><h2 class="anchored" data-anchor-id="group-on-multiple-columns">Group on Multiple Columns</h2>
+<p>We can group by more than one column. For example, to view the number of students in each treatment group per section:</p>
+<div class="cell">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ss_q1_tbl</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">section</span>, <span class="va">treatment</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span>num_students <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`summarise()` has grouped output by 'section'. You can override using the
+`.groups` argument.</code></pre>
+</div>
+<div class="cell-output-display">
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["section"],"name":[1],"type":["chr"],"align":["left"]},{"label":["treatment"],"name":[2],"type":["chr"],"align":["left"]},{"label":["num_students"],"name":[3],"type":["int"],"align":["right"]}],"data":[{"1":"Section 1","2":"control","3":"9"},{"1":"Section 1","2":"treatment 1","3":"8"},{"1":"Section 1","2":"treatment 2","3":"12"},{"1":"Section 2","2":"control","3":"8"},{"1":"Section 2","2":"treatment 1","3":"10"},{"1":"Section 2","2":"treatment 2","3":"9"},{"1":"Section 3","2":"control","3":"9"},{"1":"Section 3","2":"treatment 1","3":"10"},{"1":"Section 3","2":"treatment 2","3":"6"},{"1":"Section 4","2":"control","3":"7"},{"1":"Section 4","2":"treatment 1","3":"6"},{"1":"Section 4","2":"treatment 2","3":"6"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+<section id="challenge-1" class="level3"><h3 class="anchored" data-anchor-id="challenge-1">CHALLENGE</h3>
+<ol start="2" type="1">
+<li>Compute the number of students per treatment group and sex.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ss_nn_tbl</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">treatment</span>, <span class="va">sex</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span>num_students <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`summarise()` has grouped output by 'treatment'. You can override using the
+`.groups` argument.</code></pre>
+</div>
+<div class="cell-output-display">
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["treatment"],"name":[1],"type":["chr"],"align":["left"]},{"label":["sex"],"name":[2],"type":["chr"],"align":["left"]},{"label":["num_students"],"name":[3],"type":["int"],"align":["right"]}],"data":[{"1":"control","2":"female","3":"17"},{"1":"control","2":"male","3":"16"},{"1":"treatment 1","2":"female","3":"17"},{"1":"treatment 1","2":"male","3":"17"},{"1":"treatment 2","2":"female","3":"19"},{"1":"treatment 2","2":"male","3":"14"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+<p><br></p>
+</section></section><section id="joins" class="level2"><h2 class="anchored" data-anchor-id="joins">Joins</h2>
+<p>Joining tables together is extremely useful for wrangling data!</p>
+<p>Let’s bring in a table with more info about the discussion sections:</p>
+<div class="cell">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">sect_info_fn</span> <span class="op">&lt;-</span> <span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org/reference/here.html">here</a></span><span class="op">(</span><span class="st">"exercises/data/section_info.tsv"</span><span class="op">)</span></span>
+<span><span class="co"># file.exists(sect_info_fn)</span></span>
+<span><span class="va">sect_info_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_tsv</a></span><span class="op">(</span><span class="va">sect_info_fn</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 4 Columns: 4
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: "\t"
+chr  (3): section, ta, day
+time (1): time
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">sect_info_tbl</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["section"],"name":[1],"type":["chr"],"align":["left"]},{"label":["ta"],"name":[2],"type":["chr"],"align":["left"]},{"label":["day"],"name":[3],"type":["chr"],"align":["left"]},{"label":["time"],"name":[4],"type":["time"],"align":["right"]}],"data":[{"1":"Section 1","2":"Mariana","3":"Mon","4":"10:00:00"},{"1":"Section 2","2":"Mariana","3":"Tues","4":"10:00:00"},{"1":"Section 3","2":"Jacob","3":"Tues","4":"14:00:00"},{"1":"Section 4","2":"Amir","3":"Thurs","4":"09:00:00"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+<p>To join tables on a common column, you can use <code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">dplyr::left_join()</a></code>:</p>
+<div class="cell">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ss_q1_sect_tbl</span> <span class="op">&lt;-</span> <span class="va">ss_q1_tbl</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span><span class="va">sect_info_tbl</span>, by <span class="op">=</span> <span class="st">"section"</span><span class="op">)</span></span>
+<span><span class="va">ss_q1_sect_tbl</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["name"],"name":[1],"type":["chr"],"align":["left"]},{"label":["section"],"name":[2],"type":["chr"],"align":["left"]},{"label":["treatment"],"name":[3],"type":["chr"],"align":["left"]},{"label":["quiz_01"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["ta"],"name":[5],"type":["chr"],"align":["left"]},{"label":["day"],"name":[6],"type":["chr"],"align":["left"]},{"label":["time"],"name":[7],"type":["time"],"align":["right"]}],"data":[{"1":"Abeyta, Syssy","2":"Section 1","3":"treatment 2","4":"89","5":"Mariana","6":"Mon","7":"10:00:00"},{"1":"Acosta, Tanisa","2":"Section 1","3":"treatment 2","4":"100","5":"Mariana","6":"Mon","7":"10:00:00"},{"1":"Agyepong, Shardae","2":"Section 2","3":"treatment 2","4":"NA","5":"Mariana","6":"Tues","7":"10:00:00"},{"1":"Apodaca, Stephanie","2":"Section 2","3":"control","4":"73","5":"Mariana","6":"Tues","7":"10:00:00"},{"1":"Arnold, Briahna","2":"Section 3","3":"control","4":"NA","5":"Jacob","6":"Tues","7":"14:00:00"},{"1":"Astorga, Esperanza","2":"Section 3","3":"treatment 1","4":"90","5":"Jacob","6":"Tues","7":"14:00:00"},{"1":"Atwell, Sheridan","2":"Section 1","3":"treatment 2","4":"92","5":"Mariana","6":"Mon","7":"10:00:00"},{"1":"Avis, Adrian","2":"Section 3","3":"treatment 1","4":"72","5":"Jacob","6":"Tues","7":"14:00:00"},{"1":"Axalan, Teriuse","2":"Section 3","3":"treatment 1","4":"62","5":"Jacob","6":"Tues","7":"14:00:00"},{"1":"Bailey, Zackery","2":"Section 2","3":"treatment 2","4":"90","5":"Mariana","6":"Tues","7":"10:00:00"},{"1":"Bang, Nam","2":"Section 3","3":"control","4":"77","5":"Jacob","6":"Tues","7":"14:00:00"},{"1":"Bayar, Mina","2":"Section 2","3":"control","4":"88","5":"Mariana","6":"Tues","7":"10:00:00"},{"1":"Beck, Emma","2":"Section 4","3":"treatment 2","4":"86","5":"Amir","6":"Thurs","7":"09:00:00"},{"1":"Begaye, Erik","2":"Section 2","3":"treatment 1","4":"75","5":"Mariana","6":"Tues","7":"10:00:00"},{"1":"Bernhardt, Mackenzy","2":"Section 2","3":"treatment 1","4":"84","5":"Mariana","6":"Tues","7":"10:00:00"},{"1":"Boaman, Matthew","2":"Section 2","3":"treatment 1","4":"89","5":"Mariana","6":"Tues","7":"10:00:00"},{"1":"Bohnert, Sheila","2":"Section 4","3":"treatment 2","4":"100","5":"Amir","6":"Thurs","7":"09:00:00"},{"1":"Bol, Anay","2":"Section 3","3":"treatment 2","4":"86","5":"Jacob","6":"Tues","7":"14:00:00"},{"1":"Bunch, Marcus","2":"Section 1","3":"control","4":"95","5":"Mariana","6":"Mon","7":"10:00:00"},{"1":"Chavez, Sonja","2":"Section 4","3":"treatment 2","4":"99","5":"Amir","6":"Thurs","7":"09:00:00"},{"1":"Chhay, Kaleb","2":"Section 4","3":"control","4":"89","5":"Amir","6":"Thurs","7":"09:00:00"},{"1":"Chou, Huy","2":"Section 3","3":"treatment 1","4":"65","5":"Jacob","6":"Tues","7":"14:00:00"},{"1":"Christian, Ayla","2":"Section 2","3":"control","4":"65","5":"Mariana","6":"Tues","7":"10:00:00"},{"1":"Colbert, Marinah","2":"Section 1","3":"control","4":"81","5":"Mariana","6":"Mon","7":"10:00:00"},{"1":"Conners, Alyssa","2":"Section 2","3":"treatment 2","4":"82","5":"Mariana","6":"Tues","7":"10:00:00"},{"1":"Cruz, Alexander","2":"Section 3","3":"treatment 2","4":"76","5":"Jacob","6":"Tues","7":"14:00:00"},{"1":"Fletcher-Pettis, Elidi","2":"Section 2","3":"treatment 1","4":"NA","5":"Mariana","6":"Tues","7":"10:00:00"},{"1":"Garcia, Alejandro","2":"Section 2","3":"control","4":"84","5":"Mariana","6":"Tues","7":"10:00:00"},{"1":"Garcia, Francisco","2":"Section 1","3":"treatment 2","4":"78","5":"Mariana","6":"Mon","7":"10:00:00"},{"1":"Guardipee, Monica","2":"Section 1","3":"treatment 2","4":"NA","5":"Mariana","6":"Mon","7":"10:00:00"},{"1":"Gustamantos, Xochitl","2":"Section 4","3":"treatment 1","4":"73","5":"Amir","6":"Thurs","7":"09:00:00"},{"1":"Hennig, Lauren","2":"Section 1","3":"treatment 1","4":"89","5":"Mariana","6":"Mon","7":"10:00:00"},{"1":"Hernandez, Christopher","2":"Section 1","3":"treatment 1","4":"81","5":"Mariana","6":"Mon","7":"10:00:00"},{"1":"Herndon, Joshua","2":"Section 2","3":"treatment 2","4":"NA","5":"Mariana","6":"Tues","7":"10:00:00"},{"1":"Hicks Sims, Joseph","2":"Section 2","3":"treatment 2","4":"100","5":"Mariana","6":"Tues","7":"10:00:00"},{"1":"Hill, Alyssa","2":"Section 1","3":"control","4":"75","5":"Mariana","6":"Mon","7":"10:00:00"},{"1":"Hobbs, Antonia","2":"Section 2","3":"treatment 2","4":"76","5":"Mariana","6":"Tues","7":"10:00:00"},{"1":"Hoey, Keaton","2":"Section 2","3":"treatment 1","4":"89","5":"Mariana","6":"Tues","7":"10:00:00"},{"1":"Holiday, Tyra","2":"Section 4","3":"treatment 1","4":"97","5":"Amir","6":"Thurs","7":"09:00:00"},{"1":"Holmes, Aundrey","2":"Section 3","3":"treatment 1","4":"82","5":"Jacob","6":"Tues","7":"14:00:00"},{"1":"Jensen, Jacob","2":"Section 3","3":"treatment 2","4":"81","5":"Jacob","6":"Tues","7":"14:00:00"},{"1":"Jones, Timothy","2":"Section 2","3":"control","4":"76","5":"Mariana","6":"Tues","7":"10:00:00"},{"1":"Koch, Rachael","2":"Section 4","3":"control","4":"90","5":"Amir","6":"Thurs","7":"09:00:00"},{"1":"Landrum, Stephany","2":"Section 3","3":"treatment 1","4":"81","5":"Jacob","6":"Tues","7":"14:00:00"},{"1":"Langer, Lovell","2":"Section 4","3":"treatment 1","4":"66","5":"Amir","6":"Thurs","7":"09:00:00"},{"1":"Lorenzo, Jamillia","2":"Section 2","3":"control","4":"82","5":"Mariana","6":"Tues","7":"10:00:00"},{"1":"Loyd, Monica","2":"Section 3","3":"control","4":"82","5":"Jacob","6":"Tues","7":"14:00:00"},{"1":"Luftig, Sunjot","2":"Section 2","3":"treatment 1","4":"NA","5":"Mariana","6":"Tues","7":"10:00:00"},{"1":"Marshall, Lakota","2":"Section 2","3":"treatment 2","4":"79","5":"Mariana","6":"Tues","7":"10:00:00"},{"1":"Martinez, Emileo","2":"Section 3","3":"treatment 1","4":"40","5":"Jacob","6":"Tues","7":"14:00:00"},{"1":"Martinez, Tania","2":"Section 3","3":"control","4":"NA","5":"Jacob","6":"Tues","7":"14:00:00"},{"1":"Martzloff, Jaime","2":"Section 1","3":"treatment 1","4":"77","5":"Mariana","6":"Mon","7":"10:00:00"},{"1":"Meharzi, Rachel","2":"Section 1","3":"treatment 2","4":"57","5":"Mariana","6":"Mon","7":"10:00:00"},{"1":"Mekonnen, Odessey","2":"Section 1","3":"treatment 2","4":"NA","5":"Mariana","6":"Mon","7":"10:00:00"},{"1":"Motz, Logan","2":"Section 4","3":"control","4":"67","5":"Amir","6":"Thurs","7":"09:00:00"},{"1":"Munoz-Beltran, Lorenzo","2":"Section 1","3":"treatment 2","4":"100","5":"Mariana","6":"Mon","7":"10:00:00"},{"1":"Newell, Nicole","2":"Section 2","3":"treatment 1","4":"76","5":"Mariana","6":"Tues","7":"10:00:00"},{"1":"Nguyen, Liny","2":"Section 3","3":"control","4":"NA","5":"Jacob","6":"Tues","7":"14:00:00"},{"1":"Nguyen, Peter","2":"Section 3","3":"treatment 2","4":"NA","5":"Jacob","6":"Tues","7":"14:00:00"},{"1":"Nunley, Patrick","2":"Section 1","3":"control","4":"81","5":"Mariana","6":"Mon","7":"10:00:00"},{"1":"Peterson, Miles","2":"Section 4","3":"control","4":"76","5":"Amir","6":"Thurs","7":"09:00:00"},{"1":"Ponce, Cody","2":"Section 1","3":"treatment 1","4":"92","5":"Mariana","6":"Mon","7":"10:00:00"},{"1":"Rice, Scott","2":"Section 3","3":"treatment 2","4":"88","5":"Jacob","6":"Tues","7":"14:00:00"},{"1":"Rose, Nickolas","2":"Section 1","3":"control","4":"NA","5":"Mariana","6":"Mon","7":"10:00:00"},{"1":"Roundy, Victoria","2":"Section 3","3":"treatment 1","4":"NA","5":"Jacob","6":"Tues","7":"14:00:00"},{"1":"Salcido-Mata, Tyler","2":"Section 2","3":"treatment 1","4":"72","5":"Mariana","6":"Tues","7":"10:00:00"},{"1":"Santillano, Nancy","2":"Section 1","3":"treatment 1","4":"74","5":"Mariana","6":"Mon","7":"10:00:00"},{"1":"Sena-Opdyke, Edgar","2":"Section 2","3":"control","4":"NA","5":"Mariana","6":"Tues","7":"10:00:00"},{"1":"Seo, Shengh","2":"Section 2","3":"treatment 2","4":"88","5":"Mariana","6":"Tues","7":"10:00:00"},{"1":"Shen, Angelique","2":"Section 3","3":"control","4":"93","5":"Jacob","6":"Tues","7":"14:00:00"},{"1":"Son, Morgan","2":"Section 1","3":"treatment 1","4":"NA","5":"Mariana","6":"Mon","7":"10:00:00"},{"1":"Stevens, Otis","2":"Section 3","3":"control","4":"80","5":"Jacob","6":"Tues","7":"14:00:00"},{"1":"Stroh, Antoinette","2":"Section 4","3":"treatment 1","4":"86","5":"Amir","6":"Thurs","7":"09:00:00"},{"1":"Stufflebean, Michael","2":"Section 1","3":"treatment 2","4":"100","5":"Mariana","6":"Mon","7":"10:00:00"},{"1":"Thao, Qing","2":"Section 1","3":"control","4":"92","5":"Mariana","6":"Mon","7":"10:00:00"},{"1":"Tohtsonie, Kawehi","2":"Section 1","3":"treatment 2","4":"100","5":"Mariana","6":"Mon","7":"10:00:00"},{"1":"Torres, Lucas","2":"Section 2","3":"control","4":"75","5":"Mariana","6":"Tues","7":"10:00:00"},{"1":"Trammell, Nykia","2":"Section 1","3":"treatment 1","4":"78","5":"Mariana","6":"Mon","7":"10:00:00"},{"1":"Turner, Ta'Lor Rae","2":"Section 1","3":"control","4":"NA","5":"Mariana","6":"Mon","7":"10:00:00"},{"1":"Walker, Jalessa","2":"Section 4","3":"treatment 1","4":"NA","5":"Amir","6":"Thurs","7":"09:00:00"},{"1":"Walton IV, Jha Nae","2":"Section 2","3":"treatment 2","4":"97","5":"Mariana","6":"Tues","7":"10:00:00"},{"1":"Wescott, Parker","2":"Section 3","3":"control","4":"66","5":"Jacob","6":"Tues","7":"14:00:00"},{"1":"Wilson, Ty","2":"Section 1","3":"treatment 2","4":"84","5":"Mariana","6":"Mon","7":"10:00:00"},{"1":"Winter, Joseph","2":"Section 4","3":"treatment 1","4":"86","5":"Amir","6":"Thurs","7":"09:00:00"},{"1":"Wong, Margaret","2":"Section 4","3":"treatment 2","4":"87","5":"Amir","6":"Thurs","7":"09:00:00"},{"1":"Yang, Jason","2":"Section 3","3":"control","4":"51","5":"Jacob","6":"Tues","7":"14:00:00"},{"1":"Zinser, Taylor","2":"Section 2","3":"treatment 1","4":"67","5":"Mariana","6":"Tues","7":"10:00:00"},{"1":"al-Aly, Rahma","2":"Section 3","3":"treatment 2","4":"100","5":"Jacob","6":"Tues","7":"14:00:00"},{"1":"al-Hamady, Abbaad","2":"Section 3","3":"treatment 1","4":"NA","5":"Jacob","6":"Tues","7":"14:00:00"},{"1":"al-Shaban, Mashal","2":"Section 4","3":"treatment 2","4":"86","5":"Amir","6":"Thurs","7":"09:00:00"},{"1":"el-Allam, Afeefa","2":"Section 1","3":"control","4":"NA","5":"Mariana","6":"Mon","7":"10:00:00"},{"1":"el-Dallal, Nawfal","2":"Section 3","3":"treatment 1","4":"73","5":"Jacob","6":"Tues","7":"14:00:00"},{"1":"el-Hamed, Safiyya","2":"Section 2","3":"treatment 1","4":"92","5":"Mariana","6":"Tues","7":"10:00:00"},{"1":"el-Lone, Rida","2":"Section 1","3":"treatment 1","4":"96","5":"Mariana","6":"Mon","7":"10:00:00"},{"1":"el-Mostafa, Widdad","2":"Section 4","3":"control","4":"84","5":"Amir","6":"Thurs","7":"09:00:00"},{"1":"el-Salem, Mastoora","2":"Section 1","3":"control","4":"NA","5":"Mariana","6":"Mon","7":"10:00:00"},{"1":"el-Shahan, Abdul Khaliq","2":"Section 1","3":"treatment 2","4":"NA","5":"Mariana","6":"Mon","7":"10:00:00"},{"1":"el-Shaheed, Shawqi","2":"Section 4","3":"control","4":"86","5":"Amir","6":"Thurs","7":"09:00:00"},{"1":"el-Shaker, Kaazima","2":"Section 4","3":"control","4":"70","5":"Amir","6":"Thurs","7":"09:00:00"},{"1":"el-Zaidi, Muneef","2":"Section 4","3":"treatment 2","4":"63","5":"Amir","6":"Thurs","7":"09:00:00"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Advanced Table Joins
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In addition to <code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join()</a></code>, dplyr has a <code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">right_join()</a></code>, <code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">inner_join()</a></code>, <code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">full_join()</a></code>, <code>semi_joni()</code>, and even <code><a href="https://dplyr.tidyverse.org/reference/filter-joins.html">anti_join()</a></code>!</p>
+<p>You can use <code><a href="https://dplyr.tidyverse.org/reference/join_by.html">join_by()</a></code> as the value of the <code>by</code> argument if the join columns have different names, you need to join on multiple columns, or the join relationship uses a comparison operator other than ‘==’.</p>
+</div>
+</div>
+<p><br></p>
+</section><section id="use-the-new-columns-for-summaries" class="level2"><h2 class="anchored" data-anchor-id="use-the-new-columns-for-summaries">Use the New Columns for Summaries</h2>
+<p>Once the tables are joined, the new columns are available for use.</p>
+<p>For each Teaching Assistant, compute the number of students, and their avg on quiz 1.</p>
+<div class="cell">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ss_q1_sect_tbl</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">ta</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span>count <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span><span class="op">(</span><span class="op">)</span>, </span>
+<span>            avg_score <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">quiz_01</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["ta"],"name":[1],"type":["chr"],"align":["left"]},{"label":["count"],"name":[2],"type":["int"],"align":["right"]},{"label":["avg_score"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"Amir","2":"19","3":"82.83333"},{"1":"Jacob","2":"25","3":"76.05263"},{"1":"Mariana","2":"56","3":"83.95349"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+<section id="challenge-2" class="level3"><h3 class="anchored" data-anchor-id="challenge-2">CHALLENGE</h3>
+<ol start="3" type="1">
+<li>How many students have discussion on each day of the week?</li>
+</ol>
+<div class="cell">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ss_q1_sect_tbl</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">day</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span>count <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["day"],"name":[1],"type":["chr"],"align":["left"]},{"label":["count"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"Mon","2":"29"},{"1":"Thurs","2":"19"},{"1":"Tues","2":"52"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+</section></section><section id="reshape-the-data" class="level2"><h2 class="anchored" data-anchor-id="reshape-the-data">Reshape the data</h2>
+<p>So far, we’ve only been working with <code>quiz_01</code>. But there are 17 other quizzes!</p>
+<p>Wouldn’t it be nice if we could:</p>
+<ul>
+<li>count up the total number of <code>NA</code>s per student for all quizzes<br>
+</li>
+<li>replace <code>NA</code> values with something else for all quizzes<br>
+</li>
+<li>compute the average of all quiz scores per student (i.e., for their final grade)<br>
+</li>
+<li>compare performance across quizzes, sections and treatment groups</li>
+</ul>
+<p>All of the above would be a lot easier to do if we <strong>make these data tidy!</strong></p>
+<p>In this case, to make the data tidy we have to transform it from its current <strong>wide</strong> format to a <strong>long</strong> format. We can do with this with <code><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">tidyr::pivot_longer()</a></code> with the following arguments:</p>
+<ul>
+<li>
+<code>cols</code> - a tidyselect expression identifying the columns we want turn into new rows<br>
+</li>
+<li>
+<code>names_to</code> - where to put the names of those columns (because they’re going to disappear)<br>
+</li>
+<li>
+<code>values_to</code> - where to put the values in those columns</li>
+</ul>
+<div class="cell">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ss_long_tbl</span> <span class="op">&lt;-</span> <span class="va">ss_nn_tbl</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer</a></span><span class="op">(</span></span>
+<span>    cols <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span><span class="op">(</span><span class="st">"quiz"</span><span class="op">)</span>,</span>
+<span>    names_to <span class="op">=</span> <span class="st">"quiz"</span>,</span>
+<span>    values_to <span class="op">=</span> <span class="st">"score"</span></span>
+<span>  <span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>See what we got:</p>
+<div class="cell">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">ss_long_tbl</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1800    9</code></pre>
+</div>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">ss_long_tbl</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["name"],"name":[1],"type":["chr"],"align":["left"]},{"label":["sex"],"name":[2],"type":["chr"],"align":["left"]},{"label":["height"],"name":[3],"type":["chr"],"align":["left"]},{"label":["section"],"name":[4],"type":["chr"],"align":["left"]},{"label":["treatment"],"name":[5],"type":["chr"],"align":["left"]},{"label":["major"],"name":[6],"type":["chr"],"align":["left"]},{"label":["year"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["quiz"],"name":[8],"type":["chr"],"align":["left"]},{"label":["score"],"name":[9],"type":["dbl"],"align":["right"]}],"data":[{"1":"Abeyta, Syssy","2":"female","3":"165.5 cm","4":"Section 1","5":"treatment 2","6":"Biology","7":"4","8":"quiz_01","9":"89"},{"1":"Abeyta, Syssy","2":"female","3":"165.5 cm","4":"Section 1","5":"treatment 2","6":"Biology","7":"4","8":"quiz_02","9":"100"},{"1":"Abeyta, Syssy","2":"female","3":"165.5 cm","4":"Section 1","5":"treatment 2","6":"Biology","7":"4","8":"quiz_03","9":"95"},{"1":"Abeyta, Syssy","2":"female","3":"165.5 cm","4":"Section 1","5":"treatment 2","6":"Biology","7":"4","8":"quiz_04","9":"98"},{"1":"Abeyta, Syssy","2":"female","3":"165.5 cm","4":"Section 1","5":"treatment 2","6":"Biology","7":"4","8":"quiz_05","9":"96"},{"1":"Abeyta, Syssy","2":"female","3":"165.5 cm","4":"Section 1","5":"treatment 2","6":"Biology","7":"4","8":"quiz_06","9":"85"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+<p><br></p>
+</section><section id="visualize-and-summarise-all-of-the-quizes" class="level2"><h2 class="anchored" data-anchor-id="visualize-and-summarise-all-of-the-quizes">Visualize and Summarise all of the Quizes</h2>
+<p>Now that the data are tidy, we can make a box-and-whiskers plots for all of the quizzes:</p>
+<div class="cell">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">ss_long_tbl</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">score</span>, x <span class="op">=</span> <span class="va">quiz</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Quiz Scores"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 330 rows containing non-finite outside the scale range
+(`stat_boxplot()`).</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="ex02_group-summarize-join-pivot_ans_files/figure-html/chunk16-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><br></p>
+<p>Something’s off with Quiz 7! Let’s remove that from our dataset.</p>
+<div class="cell">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ss_cln_tbl</span> <span class="op">&lt;-</span> <span class="va">ss_long_tbl</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">quiz</span> <span class="op">!=</span> <span class="st">"quiz_07"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">ss_cln_tbl</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1700    9</code></pre>
+</div>
+</div>
+<p>View the box plots again:</p>
+<div class="cell">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">ss_cln_tbl</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">score</span>, x <span class="op">=</span> <span class="va">quiz</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Quiz Scores"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 313 rows containing non-finite outside the scale range
+(`stat_boxplot()`).</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="ex02_group-summarize-join-pivot_ans_files/figure-html/chunk18-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Much better!</p>
+<section id="challenge-3" class="level3"><h3 class="anchored" data-anchor-id="challenge-3">CHALLENGE</h3>
+<ol start="4" type="1">
+<li>Compute the final pop-quiz average for each student (ignoring NAs for now). Compute the student ranks for the total average.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## Your answer here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="5" type="1">
+<li>Compute the number of NAs per student and display it next to final average. Does this support the theory that coming to class supports learning?</li>
+</ol>
+<div class="cell">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## Your answer here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="6" type="1">
+<li>Create box-and-whisker plots of all quizzes combined for each treatment group. (Does it look any of them had a significant effect?)</li>
+</ol>
+<div class="cell">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## Your answer here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><br></p>
+</section></section><section id="done" class="level2"><h2 class="anchored" data-anchor-id="done">DONE!</h2>
+<p>Remember to render your Quarto document so you have a pretty HTML file to keep for future reference.</p>
+</section></main><!-- /main column --><script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+</body></html>

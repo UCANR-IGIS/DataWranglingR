@@ -1,0 +1,274 @@
+---
+title: "Data Wrangling Exercise 2"
+format:
+  html:
+    df-print: paged
+    code-link: true
+    toc: true
+    toc-expand: 3
+editor: source
+---
+
+In this exercise, we'll continue to work with the pop-quiz data using the following techiques:
+
+- group & summarize
+- joins
+- reshape
+
+## Setup
+
+Load the packages we'll be using:
+
+```{r chunk01, message = FALSE}
+library(readr)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(stringr)
+library(lubridate)
+library(conflicted)
+conflicts_prefer(
+  dplyr::select,
+  dplyr::filter,
+  dplyr::arrange
+)
+```
+
+We'll continue to work with the pop-quiz data we saw in the first exercise:
+
+```{r chunk02}
+ss_fn <- here::here("./exercises/data/student_scores.tsv")
+# file.exists(ss_fn)
+ss_nn_tbl <- readr::read_tsv(file = ss_fn) |> 
+  rename_all(tolower) |>                       
+  rename_all(~ str_replace_all(., " ", "_"))
+head(ss_nn_tbl)
+```
+
+## Group and Summarize
+
+For this section, we'll work with the first quiz only:
+
+```{r chunk03}
+ss_q1_tbl <- ss_nn_tbl |> 
+  select(name, section, treatment, quiz_01)
+```
+
+Let's compute the number of students per section. We start by grouping the rows by section:
+
+```{r chunk04}
+ss_q1_tbl |> 
+  group_by(section)
+```
+
+**Note:** Simply grouping rows with `group_by()` doesn't do anything useful!
+
+You have to follow it up with something else (usually `summarize()`).
+
+To count the number of rows per group, we can define a new column using `n()`.
+
+```{r chunk05}
+ss_q1_tbl |> 
+  group_by(section) |> 
+  summarize(num_students = n())
+```
+
+::: {.callout-note}
+## Functions you can use in `summarize()`
+
+What gets fed into `summarize()` are groups of rows (one at a time).
+
+Hence, when you define columns in `summarize()`, you have to use functions that can receive multiple values and return just one (i.e., aggregate functions). Common examples include `n()`, `mean()`, `sum()`, `max()`, `first()`, etc.
+:::
+
+\
+
+Next, compute the average score on Quiz 1 by section:
+
+```{r chunk06}
+ss_q1_tbl |> 
+  group_by(section) |> 
+  summarize(quiz_01_avg = mean(quiz_01, na.rm = TRUE))
+```
+
+### CHALLENGE
+
+1) Compute the average score on Quiz 1 by treatment group.
+
+```{r chunk07}
+ss_q1_tbl |> 
+  group_by(treatment) |> 
+  summarize(quiz_01_avg = mean(quiz_01, na.rm = TRUE))
+```
+
+\
+
+## Group on Multiple Columns
+
+We can group by more than one column. For example, to view the number of students in each treatment group per section:
+
+```{r chunk08}
+ss_q1_tbl |> 
+  group_by(section, treatment) |> 
+  summarize(num_students = n())
+```
+
+### CHALLENGE
+
+2) Compute the number of students per treatment group and sex.
+
+```{r chunk09}
+ss_nn_tbl |> 
+  group_by(treatment, sex) |> 
+  summarize(num_students = n())
+```
+
+\
+
+## Joins
+
+Joining tables together is extremely useful for wrangling data!
+
+Let's bring in a table with more info about the discussion sections:
+
+```{r chunk10}
+sect_info_fn <- here::here("exercises/data/section_info.tsv")
+# file.exists(sect_info_fn)
+sect_info_tbl <- read_tsv(sect_info_fn)
+sect_info_tbl
+```
+
+To join tables on a common column, you can use `dplyr::left_join()`:
+
+```{r chunk11}
+ss_q1_sect_tbl <- ss_q1_tbl |> 
+  left_join(sect_info_tbl, by = "section")
+ss_q1_sect_tbl
+```
+
+::: {.callout-tip}
+## Advanced Table Joins
+
+In addition to `left_join()`, dplyr has a `right_join()`, `inner_join()`, `full_join()`, `semi_joni()`, and even `anti_join()`!
+
+You can use `join_by()` as the value of the `by` argument if the join columns have different names, you need to join on multiple columns, or the join relationship uses a comparison operator other than '=='.
+:::
+
+\
+
+## Use the New Columns for Summaries
+
+Once the tables are joined, the new columns are available for use.
+
+For each Teaching Assistant, compute the number of students, and their avg on quiz 1.
+
+```{r chunk12}
+ss_q1_sect_tbl |> 
+  group_by(ta) |> 
+  summarise(count = n(), 
+            avg_score = mean(quiz_01, na.rm = TRUE))
+```
+
+### CHALLENGE
+
+3) How many students have discussion on each day of the week?
+
+```{r chunk13}
+ss_q1_sect_tbl |> 
+  group_by(day) |> 
+  summarise(count = n())
+```
+
+## Reshape the data
+
+So far, we've only been working with `quiz_01`. But there are 17 other quizzes!
+
+Wouldn't it be nice if we could:
+
+- count up the total number of `NA`s per student for all quizzes  
+- replace `NA` values with something else for all quizzes  
+- compute the average of all quiz scores per student (i.e., for their final grade)  
+- compare performance across quizzes, sections and treatment groups  
+
+All of the above would be a lot easier to do if we **make these data tidy!**
+
+In this case, to make the data tidy we have to transform it from its current **wide** format to a **long** format. We can do with this with `tidyr::pivot_longer()` with the following arguments:
+
+- `cols` - a tidyselect expression identifying the columns we want turn into new rows  
+- `names_to` - where to put the names of those columns (because they're going to disappear)  
+- `values_to` - where to put the values in those columns
+
+```{r chunk14}
+ss_long_tbl <- ss_nn_tbl |> 
+  pivot_longer(
+    cols = starts_with("quiz"),
+    names_to = "quiz",
+    values_to = "score"
+  )
+```
+
+See what we got:
+
+```{r chunk15}
+dim(ss_long_tbl)
+head(ss_long_tbl)
+```
+
+\
+
+## Visualize and Summarise all of the Quizes
+
+Now that the data are tidy, we can make a box-and-whiskers plots for all of the quizzes:
+
+```{r chunk16}
+ggplot(ss_long_tbl, aes(y = score, x = quiz)) +
+  geom_boxplot() +
+  labs(title = "Quiz Scores")
+```
+
+\
+
+Something's off with Quiz 7! Let's remove that from our dataset.
+
+```{r chunk17}
+ss_cln_tbl <- ss_long_tbl |> 
+  filter(quiz != "quiz_07")
+dim(ss_cln_tbl)
+```
+
+View the box plots again:
+
+```{r chunk18}
+ggplot(ss_cln_tbl, aes(y = score, x = quiz)) +
+  geom_boxplot() +
+  labs(title = "Quiz Scores")
+```
+
+Much better!
+
+### CHALLENGE
+
+4) Compute the final pop-quiz average for each student (ignoring NAs for now). Compute the student ranks for the total average.
+
+```{r chunk19}
+## Your answer here
+```
+
+5) Compute the number of NAs per student and display it next to final average. Does this support the theory that coming to class supports learning?
+
+```{r chunk20}
+## Your answer here
+```
+
+6) Create box-and-whisker plots of all quizzes combined for each treatment group. (Does it look any of them had a significant effect?)
+
+```{r chunk21}
+## Your answer here
+```
+
+\
+
+## DONE!
+
+Remember to render your Quarto document so you have a pretty HTML file to keep for future reference.
+

@@ -1,5 +1,5 @@
 slides/
-exercises/*.html
+exercises/quiz01_grades.tsv
 ~*
 *.bak
 slides/*_cache/*

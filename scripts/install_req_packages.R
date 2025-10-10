@@ -1,14 +1,13 @@
+if (!requireNamespace("pak")) install.packages("pak")
+
 ## Required packages
-pkgs_req <- c("tidyverse", "here", "zoo", "palmerpenguins", "conflicted", "wrkshputils", 
-              "usethis", "here", "markdown", "conflicted")
+pkgs_req <- c("tidyverse", "here", "zoo", "conflicted", "usethis", "markdown")
 
 ## See which ones are missing
 (pkgs_missing <- pkgs_req[!(pkgs_req %in% installed.packages()[,"Package"])])
 
 ## Install missing ones
-if (length(pkgs_missing)) install.packages(pkgs_missing, dependencies=TRUE,
-                                           repos = c('https://cloud.r-project.org', 
-                                                     'https://ajlyons.r-universe.dev'))
+if (length(pkgs_missing)) pak::pkg_install(pkgs_missing, dependencies=TRUE)
 
 ## Re-run the check for missing packages
 pkgs_missing <- pkgs_req[!(pkgs_req %in% installed.packages()[,"Package"])]

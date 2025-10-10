@@ -9,7 +9,7 @@ format:
 editor: source
 ---
 
-In this exercise, we'll continue to work with the pop-quiz data using the following techiques:
+In this exercise, we'll continue to work with the pop-quiz data using the following techniques:
 
 - group & summarize
 - joins

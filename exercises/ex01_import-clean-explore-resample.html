@@ -54,18 +54,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }
 </style>
 
-<script src="ex01_import-clean-data_files/libs/clipboard/clipboard.min.js"></script>
-<script src="ex01_import-clean-data_files/libs/quarto-html/quarto.js" type="module"></script>
-<script src="ex01_import-clean-data_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="ex01_import-clean-data_files/libs/quarto-html/popper.min.js"></script>
-<script src="ex01_import-clean-data_files/libs/quarto-html/tippy.umd.min.js"></script>
-<script src="ex01_import-clean-data_files/libs/quarto-html/anchor.min.js"></script>
-<link href="ex01_import-clean-data_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="ex01_import-clean-data_files/libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="ex01_import-clean-data_files/libs/bootstrap/bootstrap.min.js"></script>
-<link href="ex01_import-clean-data_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="ex01_import-clean-data_files/libs/bootstrap/bootstrap-bb462d781dde1847d9e3ccf7736099dd.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><link href="ex01_import-clean-data_files/libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
-<script src="ex01_import-clean-data_files/libs/pagedtable-1.1/js/pagedtable.js"></script>
+<script src="ex01_import-clean-explore-resample_files/libs/clipboard/clipboard.min.js"></script>
+<script src="ex01_import-clean-explore-resample_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="ex01_import-clean-explore-resample_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="ex01_import-clean-explore-resample_files/libs/quarto-html/popper.min.js"></script>
+<script src="ex01_import-clean-explore-resample_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="ex01_import-clean-explore-resample_files/libs/quarto-html/anchor.min.js"></script>
+<link href="ex01_import-clean-explore-resample_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="ex01_import-clean-explore-resample_files/libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="ex01_import-clean-explore-resample_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="ex01_import-clean-explore-resample_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="ex01_import-clean-explore-resample_files/libs/bootstrap/bootstrap-bb462d781dde1847d9e3ccf7736099dd.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><link href="ex01_import-clean-explore-resample_files/libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+<script src="ex01_import-clean-explore-resample_files/libs/pagedtable-1.1/js/pagedtable.js"></script>
 </head>
 <body class="quarto-light">
 
@@ -75,8 +75,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
 <li><a href="#importing-messy-excel-data" id="toc-importing-messy-excel-data" class="nav-link active" data-scroll-target="#importing-messy-excel-data">Importing Messy Excel Data</a></li>
+  <li><a href="#import-pop-quiz-data" id="toc-import-pop-quiz-data" class="nav-link" data-scroll-target="#import-pop-quiz-data">Import Pop-Quiz Data</a></li>
   <li>
-<a href="#import-pop-quiz-data" id="toc-import-pop-quiz-data" class="nav-link" data-scroll-target="#import-pop-quiz-data">Import Pop-Quiz Data</a>
+<a href="#explore-the-data" id="toc-explore-the-data" class="nav-link" data-scroll-target="#explore-the-data">Explore the Data</a>
   <ul class="collapse">
 <li><a href="#challenge" id="toc-challenge" class="nav-link" data-scroll-target="#challenge">CHALLENGE</a></li>
   </ul>
@@ -85,35 +86,34 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li>
 <a href="#plot-the-distribution-of-quiz-1-scores" id="toc-plot-the-distribution-of-quiz-1-scores" class="nav-link" data-scroll-target="#plot-the-distribution-of-quiz-1-scores">Plot the Distribution of Quiz 1 Scores</a>
   <ul class="collapse">
-<li><a href="#extract-just-the-quiz-1-scores" id="toc-extract-just-the-quiz-1-scores" class="nav-link" data-scroll-target="#extract-just-the-quiz-1-scores">Extract just the Quiz 1 scores</a></li>
-  <li><a href="#challenge-1" id="toc-challenge-1" class="nav-link" data-scroll-target="#challenge-1">CHALLENGE</a></li>
+<li><a href="#challenge-1" id="toc-challenge-1" class="nav-link" data-scroll-target="#challenge-1">CHALLENGE</a></li>
   </ul>
 </li>
   <li>
-<a href="#create-box-and-whiskers-plots" id="toc-create-box-and-whiskers-plots" class="nav-link" data-scroll-target="#create-box-and-whiskers-plots">Create Box-and-Whiskers Plots</a>
+<a href="#explore-the-top-scores" id="toc-explore-the-top-scores" class="nav-link" data-scroll-target="#explore-the-top-scores">Explore the Top Scores</a>
   <ul class="collapse">
 <li><a href="#challenge-2" id="toc-challenge-2" class="nav-link" data-scroll-target="#challenge-2">CHALLENGE</a></li>
   </ul>
 </li>
-  <li>
-<a href="#explore-the-top-and-bottom-scores" id="toc-explore-the-top-and-bottom-scores" class="nav-link" data-scroll-target="#explore-the-top-and-bottom-scores">Explore the Top and Bottom Scores</a>
-  <ul class="collapse">
-<li><a href="#challenge-3" id="toc-challenge-3" class="nav-link" data-scroll-target="#challenge-3">CHALLENGE</a></li>
-  </ul>
-</li>
-  <li><a href="#compute-rank" id="toc-compute-rank" class="nav-link" data-scroll-target="#compute-rank">Compute Rank</a></li>
+  <li><a href="#compute-ranks" id="toc-compute-ranks" class="nav-link" data-scroll-target="#compute-ranks">Compute Ranks</a></li>
   <li><a href="#flag-failing-students" id="toc-flag-failing-students" class="nav-link" data-scroll-target="#flag-failing-students">Flag Failing Students</a></li>
   <li>
 <a href="#assign-letter-grades" id="toc-assign-letter-grades" class="nav-link" data-scroll-target="#assign-letter-grades">Assign Letter Grades</a>
   <ul class="collapse">
-<li><a href="#challenge-4" id="toc-challenge-4" class="nav-link" data-scroll-target="#challenge-4">CHALLENGE</a></li>
+<li><a href="#challenge-3" id="toc-challenge-3" class="nav-link" data-scroll-target="#challenge-3">CHALLENGE</a></li>
   </ul>
 </li>
-  <li><a href="#split-first-and-last-name" id="toc-split-first-and-last-name" class="nav-link" data-scroll-target="#split-first-and-last-name">Split First and Last Name</a></li>
   <li>
-<a href="#save-the-grades-for-quiz-1-to-disk" id="toc-save-the-grades-for-quiz-1-to-disk" class="nav-link" data-scroll-target="#save-the-grades-for-quiz-1-to-disk">Save the grades for Quiz 1 to disk</a>
+<a href="#split-first-and-last-name" id="toc-split-first-and-last-name" class="nav-link" data-scroll-target="#split-first-and-last-name">Split First and Last Name</a>
   <ul class="collapse">
-<li><a href="#challenge-5" id="toc-challenge-5" class="nav-link" data-scroll-target="#challenge-5">CHALLENGE</a></li>
+<li><a href="#split-using-mutate-str_split_i" id="toc-split-using-mutate-str_split_i" class="nav-link" data-scroll-target="#split-using-mutate-str_split_i">Split using <code>mutate()</code> + <code>str_split_i()</code></a></li>
+  <li><a href="#split-using-separate_wider_delim" id="toc-split-using-separate_wider_delim" class="nav-link" data-scroll-target="#split-using-separate_wider_delim">Split using <code>separate_wider_delim()</code></a></li>
+  </ul>
+</li>
+  <li>
+<a href="#save-the-grade-sheet-for-quiz-1-to-disk" id="toc-save-the-grade-sheet-for-quiz-1-to-disk" class="nav-link" data-scroll-target="#save-the-grade-sheet-for-quiz-1-to-disk">Save the grade sheet for Quiz 1 to disk</a>
+  <ul class="collapse">
+<li><a href="#challenge-4" id="toc-challenge-4" class="nav-link" data-scroll-target="#challenge-4">CHALLENGE</a></li>
   </ul>
 </li>
   <li><a href="#done" id="toc-done" class="nav-link" data-scroll-target="#done">DONE!</a></li>
@@ -121,6 +121,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
 <h1 class="title">Data Wrangling Exercise 1</h1>
+<p class="subtitle lead">Import Data, Clean, Explore, Resample &amp; Split Columns</p>
 </div>
 
 
@@ -135,7 +136,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 </header><section id="importing-messy-excel-data" class="level2"><h2 class="anchored" data-anchor-id="importing-messy-excel-data">Importing Messy Excel Data</h2>
-<p>Although your data may be in a spreadsheet or CSV file, it may not be in an ideal format. See this registration list:</p>
+<p>Although your data may be in a spreadsheet or CSV file, it may not be in an ideal format.</p>
+<p>See for example this (fake) registration list:</p>
 <div class="cell">
 <div class="cell-output-display">
 <div>
@@ -144,9 +146,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p><br></p>
-<p>Here we see a bunch of stuff before the data, the column “names” are unwieldy, there are several extra columns we don’t need, missing values, etc.</p>
-<p>You can tackle many of these issues when you import the data. First, we construct the file name and verify it exists:</p>
+<p>Here we see:</p>
+<ul>
+<li>a bunch of stuff before the data<br>
+</li>
+<li>unwieldy column “names”<br>
+</li>
+<li>several extra columns we don’t need, missing values, etc.</li>
+</ul>
+<p>We can tackle many of these issues when we import the data. First, we construct the file name and verify it exists:</p>
 <div class="cell">
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">reg_list_fn</span> <span class="op">&lt;-</span> <span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org/reference/here.html">here</a></span><span class="op">(</span><span class="st">"./exercises/data/SurveyResults_36100.xlsx"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/files.html">file.exists</a></span><span class="op">(</span><span class="va">reg_list_fn</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -154,35 +162,30 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>[1] TRUE</code></pre>
 </div>
 </div>
-<p>To import Excel files, we’ll go to <code><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_xlsx()</a></code> from the <em>readxl</em> package. This function has <strong>a lot</strong> of options, so it’s worth reading the help page:</p>
+<p>To import Excel files, we’ll go to <code><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_xlsx()</a></code> from the <em>readxl</em> package. (This function has <strong>a lot</strong> of options, so it’s worth reading the help page.)</p>
 <div class="cell">
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://readxl.tidyverse.org">readxl</a></span><span class="op">)</span></span>
 <span><span class="va">reg_list_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_xlsx</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">reg_list_fn</span>, </span>
 <span>                         sheet <span class="op">=</span> <span class="st">"Survey Output"</span>, </span>
 <span>                         skip <span class="op">=</span> <span class="fl">3</span>, </span>
-<span>                         col_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"user"</span>, <span class="st">"reg_date"</span>, <span class="st">"fname"</span>, <span class="st">"lname"</span>, </span>
-<span>                                       <span class="st">"email"</span>, <span class="st">"title"</span>, <span class="st">"org"</span>, </span>
-<span>                                       <span class="st">"cosponsor"</span>, <span class="st">"allergies"</span><span class="op">)</span>,</span>
-<span>                         col_types <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"text"</span>, <span class="st">"text"</span>, <span class="st">"text"</span>, <span class="st">"text"</span>, <span class="st">"text"</span>, <span class="st">"text"</span>,</span>
-<span>                                       <span class="st">"numeric"</span>, <span class="st">"text"</span>, <span class="st">"text"</span><span class="op">)</span><span class="op">)</span></span>
+<span>                         col_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"user"</span>, <span class="st">"reg_date"</span>, <span class="st">"fname"</span>, <span class="st">"lname"</span>, <span class="st">"email"</span>, </span>
+<span>                                       <span class="st">"title"</span>, <span class="st">"arcgis"</span>, <span class="st">"cosponsor_org"</span>, <span class="st">"allergies"</span><span class="op">)</span>,</span>
+<span>                         col_types <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"text"</span>, <span class="st">"text"</span>, <span class="st">"text"</span>, <span class="st">"text"</span>, <span class="st">"text"</span>, </span>
+<span>                                       <span class="st">"text"</span>, <span class="st">"numeric"</span>, <span class="st">"text"</span>, <span class="st">"text"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">reg_list_tbl</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div data-pagedtable="false">
   <script data-pagedtable-source="" type="application/json">
-{"columns":[{"label":["user"],"name":[1],"type":["chr"],"align":["left"]},{"label":["reg_date"],"name":[2],"type":["chr"],"align":["left"]},{"label":["fname"],"name":[3],"type":["chr"],"align":["left"]},{"label":["lname"],"name":[4],"type":["chr"],"align":["left"]},{"label":["email"],"name":[5],"type":["chr"],"align":["left"]},{"label":["title"],"name":[6],"type":["chr"],"align":["left"]},{"label":["org"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["cosponsor"],"name":[8],"type":["chr"],"align":["left"]},{"label":["allergies"],"name":[9],"type":["chr"],"align":["left"]}],"data":[{"1":"1789066","2":"01/20/2022 21:53:15","3":"Joshua","4":"Nakarmi Dhital","5":"joshua.nakarmi_dhital@yahoo.com","6":"PhD student","7":"1","8":"AIFS","9":"NA"},{"1":"1791416","2":"01/26/2022 11:33:09","3":"Timothy","4":"Leep","5":"timothy.leep@frisco.edu","6":"graduate student","7":"1","8":"NA","9":"NA"},{"1":"1794212","2":"02/02/2022 8:01:47","3":"Brandon","4":"Vilayhong","5":"brandon.vilayhong@yahoo.com","6":"Global Citizen","7":"2","8":"NA","9":"NA"},{"1":"1794299","2":"02/02/2022 10:15:23","3":"Hameeda","4":"el-Dar","5":"hameeda.el-dar@workplace.com","6":"Community Planner","7":"2","8":"CalFire","9":"NA"},{"1":"1794626","2":"02/02/2022 17:49:09","3":"Qisma","4":"al-Shaheed","5":"qisma.al-shaheed@udop.edu","6":"Admin Assistant III","7":"1","8":"NA","9":"NA"},{"1":"1796012","2":"02/06/2022 14:49:05","3":"Amy","4":"Harris","5":"amy.harris@yahoo.com","6":"Junior Specialist","7":"4","8":"NA","9":"NA"},{"1":"1796025","2":"02/06/2022 15:54:53","3":"Robert","4":"Gordon","5":"robert.gordon@yahoo.com","6":"Student","7":"NA","8":"NA","9":"NA"},{"1":"1797375","2":"02/09/2022 9:44:38","3":"Tarik","4":"Harris","5":"tarik.harris@udop.edu","6":"Assistant Prof","7":"NA","8":"NA","9":"NA"},{"1":"1801566","2":"02/16/2022 12:14:15","3":"Charles","4":"Mathews","5":"charles.mathews@gmail.com","6":"Fellow","7":"1","8":"AIFS","9":"NA"},{"1":"1801737","2":"02/16/2022 15:23:11","3":"Shaheera","4":"el-Salame","5":"shaheera.el-salame@csula.edu","6":"Climate Fellow","7":"2","8":"GrizzlyCorps","9":"NA"},{"1":"1802244","2":"02/17/2022 13:24:32","3":"Sydney","4":"Lemmons","5":"sydney.lemmons@csula.edu","6":"Clown","7":"2","8":"NA","9":"NA"},{"1":"1803033","2":"02/19/2022 9:06:57","3":"Laura","4":"Talbot","5":"laura.talbot@urock.edu","6":"Postdoctoral researcher","7":"1","8":"NA","9":"NA"},{"1":"1803376","2":"02/21/2022 11:01:54","3":"Laura","4":"Talbot","5":"laura.talbot@urock.edu","6":"Postdoctoral researcher","7":"1","8":"CalFire","9":"NA"},{"1":"1803458","2":"02/21/2022 18:11:38","3":"Jensen","4":"Sabin","5":"jensen.sabin@frisco.edu","6":"Research","7":"NA","8":"NA","9":"NA"},{"1":"1807924","2":"03/03/2022 15:58:05","3":"Steven","4":"Wilson","5":"steven.wilson@frisco.edu","6":"PhD Student","7":"3","8":"NA","9":"NA"},{"1":"1808981","2":"03/07/2022 12:46:48","3":"Jadow","4":"Lee","5":"jadow.lee@gmail.com","6":"Activist","7":"1","8":"NA","9":"NA"},{"1":"1814228","2":"03/21/2022 16:27:12","3":"Perry","4":"Pierce","5":"perry.pierce@udop.edu","6":"Staff Research Associate","7":"3","8":"UCANR","9":"NA"},{"1":"1816706","2":"03/29/2022 12:39:26","3":"Luis","4":"Plaza","5":"luis.plaza@yahoo.com","6":"Farm Advisor","7":"2","8":"UCANR","9":"NA"},{"1":"1816856","2":"03/29/2022 17:57:11","3":"Ricky","4":"Moscoso","5":"ricky.moscoso@gmail.com","6":"County Coordinator","7":"3","8":"CalFire","9":"NA"},{"1":"1820070","2":"04/05/2022 21:29:41","3":"Muneer","4":"al-Salloum","5":"muneer.al-salloum@frisco.edu","6":"Urban Gardener","7":"1","8":"UCANR","9":"NA"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["user"],"name":[1],"type":["chr"],"align":["left"]},{"label":["reg_date"],"name":[2],"type":["chr"],"align":["left"]},{"label":["fname"],"name":[3],"type":["chr"],"align":["left"]},{"label":["lname"],"name":[4],"type":["chr"],"align":["left"]},{"label":["email"],"name":[5],"type":["chr"],"align":["left"]},{"label":["title"],"name":[6],"type":["chr"],"align":["left"]},{"label":["arcgis"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["cosponsor_org"],"name":[8],"type":["chr"],"align":["left"]},{"label":["allergies"],"name":[9],"type":["chr"],"align":["left"]}],"data":[{"1":"1789066","2":"01/20/2022 21:53:15","3":"Joshua","4":"Nakarmi Dhital","5":"joshua.nakarmi_dhital@yahoo.com","6":"PhD student","7":"1","8":"AIFS","9":"NA"},{"1":"1791416","2":"01/26/2022 11:33:09","3":"Timothy","4":"Leep","5":"timothy.leep@frisco.edu","6":"graduate student","7":"1","8":"NA","9":"NA"},{"1":"1794212","2":"02/02/2022 8:01:47","3":"Brandon","4":"Vilayhong","5":"brandon.vilayhong@yahoo.com","6":"Global Citizen","7":"2","8":"NA","9":"NA"},{"1":"1794299","2":"02/02/2022 10:15:23","3":"Hameeda","4":"el-Dar","5":"hameeda.el-dar@workplace.com","6":"Community Planner","7":"2","8":"CalFire","9":"NA"},{"1":"1794626","2":"02/02/2022 17:49:09","3":"Qisma","4":"al-Shaheed","5":"qisma.al-shaheed@udop.edu","6":"Admin Assistant III","7":"1","8":"NA","9":"NA"},{"1":"1796012","2":"02/06/2022 14:49:05","3":"Amy","4":"Harris","5":"amy.harris@yahoo.com","6":"Junior Specialist","7":"4","8":"NA","9":"NA"},{"1":"1796025","2":"02/06/2022 15:54:53","3":"Robert","4":"Gordon","5":"robert.gordon@yahoo.com","6":"Student","7":"NA","8":"NA","9":"NA"},{"1":"1797375","2":"02/09/2022 9:44:38","3":"Tarik","4":"Harris","5":"tarik.harris@udop.edu","6":"Assistant Prof","7":"NA","8":"NA","9":"NA"},{"1":"1801566","2":"02/16/2022 12:14:15","3":"Charles","4":"Mathews","5":"charles.mathews@gmail.com","6":"Fellow","7":"1","8":"AIFS","9":"NA"},{"1":"1801737","2":"02/16/2022 15:23:11","3":"Shaheera","4":"el-Salame","5":"shaheera.el-salame@csula.edu","6":"Climate Fellow","7":"2","8":"GrizzlyCorps","9":"NA"},{"1":"1802244","2":"02/17/2022 13:24:32","3":"Sydney","4":"Lemmons","5":"sydney.lemmons@csula.edu","6":"Clown","7":"2","8":"NA","9":"NA"},{"1":"1803033","2":"02/19/2022 9:06:57","3":"Laura","4":"Talbot","5":"laura.talbot@urock.edu","6":"Postdoctoral researcher","7":"1","8":"NA","9":"NA"},{"1":"1803376","2":"02/21/2022 11:01:54","3":"Laura","4":"Talbot","5":"laura.talbot@urock.edu","6":"Postdoctoral researcher","7":"1","8":"CalFire","9":"NA"},{"1":"1803458","2":"02/21/2022 18:11:38","3":"Jensen","4":"Sabin","5":"jensen.sabin@frisco.edu","6":"Research","7":"NA","8":"NA","9":"NA"},{"1":"1807924","2":"03/03/2022 15:58:05","3":"Steven","4":"Wilson","5":"steven.wilson@frisco.edu","6":"PhD Student","7":"3","8":"NA","9":"NA"},{"1":"1808981","2":"03/07/2022 12:46:48","3":"Jadow","4":"Lee","5":"jadow.lee@gmail.com","6":"Activist","7":"1","8":"NA","9":"NA"},{"1":"1814228","2":"03/21/2022 16:27:12","3":"Perry","4":"Pierce","5":"perry.pierce@udop.edu","6":"Staff Research Associate","7":"3","8":"UCANR","9":"NA"},{"1":"1816706","2":"03/29/2022 12:39:26","3":"Luis","4":"Plaza","5":"luis.plaza@yahoo.com","6":"Farm Advisor","7":"2","8":"UCANR","9":"NA"},{"1":"1816856","2":"03/29/2022 17:57:11","3":"Ricky","4":"Moscoso","5":"ricky.moscoso@gmail.com","6":"County Coordinator","7":"3","8":"CalFire","9":"NA"},{"1":"1820070","2":"04/05/2022 21:29:41","3":"Muneer","4":"al-Salloum","5":"muneer.al-salloum@frisco.edu","6":"Urban Gardener","7":"1","8":"UCANR","9":"NA"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 </div>
 </div>
-<p>Likewise, the <a href="https://readr.tidyverse.org/">readr</a> package provides super-charged functions for importing and exporting rectangular data in text formats.</p>
-<p><strong>Take Home Messages</strong></p>
-<ul>
-<li><p>Data wrangling starts when you import</p></li>
-<li><p>You’re not limited to just using <code><a href="https://rdrr.io/r/utils/read.table.html">read.csv()</a></code></p></li>
-</ul>
-<p><br></p>
+<p>And just like that, our data are ready to work with!</p>
+<p>Similarly, <a href="https://readr.tidyverse.org/">readr</a> provides super-charged functions for importing and exporting rectangular data in text formats.</p>
 </section><section id="import-pop-quiz-data" class="level2"><h2 class="anchored" data-anchor-id="import-pop-quiz-data">Import Pop-Quiz Data</h2>
-<p>The dataset we’ll use for the rest of the exercise is fake data from weekly pop-quizzes in an undergraduate class. These data were collected as part of a study on improving learning through two interventions. In addition to the quiz scores for each student, we have other information about the students including which “treatment” group they belong to.</p>
+<p>The dataset we’ll use for the rest of the exercise is fake data from weekly pop-quizzes in an undergraduate class. These data were collected as part of a study on improving learning through two interventions, plus a control group.</p>
+<p>In addition to the quiz scores for each student, the data includes some additional info about the students, including their discussion section, major(s), year, sex, and height.</p>
 <p>The data are saved in a tab-separated-value format:</p>
 <div class="cell">
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://readr.tidyverse.org">readr</a></span><span class="op">)</span></span>
@@ -202,13 +205,17 @@ dbl (19): Year, Quiz 01, Quiz 02, Quiz 03, Quiz 04, Quiz 05, Quiz 06, Quiz 0...
 ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
 </div>
 </div>
+<p><br></p>
+</section><section id="explore-the-data" class="level2"><h2 class="anchored" data-anchor-id="explore-the-data">Explore the Data</h2>
 <p>Let’s see what we got!</p>
 <div class="cell">
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">ss_tbl</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## Number of rows and columns</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">ss_tbl</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 100  25</code></pre>
 </div>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">ss_tbl</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## Column names</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">ss_tbl</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] "Name"      "Sex"       "Height"    "Section"   "Treatment" "Major"    
  [7] "Year"      "Quiz 01"   "Quiz 02"   "Quiz 03"   "Quiz 04"   "Quiz 05"  
@@ -216,7 +223,8 @@ dbl (19): Year, Quiz 01, Quiz 02, Quiz 03, Quiz 04, Quiz 05, Quiz 06, Quiz 0...
 [19] "Quiz 12"   "Quiz 13"   "Quiz 14"   "Quiz 15"   "Quiz 16"   "Quiz 17"  
 [25] "Quiz 18"  </code></pre>
 </div>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">ss_tbl</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## First six rows</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">ss_tbl</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div data-pagedtable="false">
   <script data-pagedtable-source="" type="application/json">
@@ -224,11 +232,13 @@ dbl (19): Year, Quiz 01, Quiz 02, Quiz 03, Quiz 04, Quiz 05, Quiz 06, Quiz 0...
   </script>
 </div>
 </div>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># View(ss_tbl)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Open it in RStudio</span></span>
+<span><span class="co"># View(ss_tbl)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>What’s in the <code>Section</code> column?</p>
+<p><br></p>
+<p>What are the values in the <code>Section</code> column?</p>
 <div class="cell">
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ss_tbl</span><span class="op">$</span><span class="va">Section</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">ss_tbl</span><span class="op">$</span><span class="va">Section</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Section 1 Section 2 Section 3 Section 4 
@@ -238,12 +248,16 @@ Section 1 Section 2 Section 3 Section 4
 <p><br></p>
 <section id="challenge" class="level3"><h3 class="anchored" data-anchor-id="challenge">CHALLENGE</h3>
 <ol type="1">
-<li><p>What are the values in the Treatment column?</p></li>
-<li><p>What is the class of the height column?</p></li>
-<li><p>Which columns have comma-separated values?</p></li>
+<li>What are the values in the Treatment column? (<a href="https://bit.ly/4ogoG5W">solution</a>)</li>
 </ol>
 <div class="cell">
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## Your answer here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="2" type="1">
+<li>What is the distribution of values in the Year column? (<a href="https://bit.ly/46OlyZ5">solution</a>)</li>
+</ol>
+<div class="cell">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## Your answer here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><br></p>
 </section></section><section id="clean-up-the-column-names" class="level2"><h2 class="anchored" data-anchor-id="clean-up-the-column-names">Clean up the column names</h2>
@@ -254,7 +268,7 @@ Section 1 Section 2 Section 3 Section 4
 </ul>
 <p>We can use the <code>dplyr</code> and <code>stringr</code> packages for this:</p>
 <div class="cell">
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span>, warn.conflicts <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span>, warn.conflicts <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## Avoid function name classes</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://conflicted.r-lib.org/">conflicted</a></span><span class="op">)</span></span>
@@ -268,14 +282,20 @@ Section 1 Section 2 Section 3 Section 4
 [conflicted] Will prefer dplyr::filter over any other package.
 [conflicted] Will prefer dplyr::arrange over any other package.</code></pre>
 </div>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://stringr.tidyverse.org">stringr</a></span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://stringr.tidyverse.org">stringr</a></span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>To apply a transformation to all column names, you can use <code><a href="https://dplyr.tidyverse.org/reference/select_all.html">dplyr::rename_all()</a></code>.</p>
-<p>The argument to <code><a href="https://dplyr.tidyverse.org/reference/select_all.html">rename_all()</a></code> should be function to apply to each column name.</p>
+<p>To apply a transformation (i.e., function) to all column names, we can use <code><a href="https://dplyr.tidyverse.org/reference/rename.html">dplyr::rename_with()</a></code>.</p>
+<p>The arguments to <code><a href="https://dplyr.tidyverse.org/reference/rename.html">rename_with()</a></code> should include:</p>
+<ol type="i">
+<li>a function to apply to each column name<br>
+</li>
+<li>a tidyselect expression which specifies which columns to alter</li>
+</ol>
 <div class="cell">
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ss_nn_tbl</span> <span class="op">&lt;-</span> <span class="va">ss_tbl</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select_all.html">rename_all</a></span><span class="op">(</span><span class="va">tolower</span><span class="op">)</span> <span class="op">|&gt;</span>                       <span class="co">## make them all lowercase</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select_all.html">rename_all</a></span><span class="op">(</span><span class="op">~</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_replace.html">str_replace_all</a></span><span class="op">(</span><span class="va">.</span>, <span class="st">" "</span>, <span class="st">"_"</span><span class="op">)</span><span class="op">)</span>   <span class="co">## replace spaces with underscores</span></span>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ss_nn_tbl</span> <span class="op">&lt;-</span> <span class="va">ss_tbl</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename_with</a></span><span class="op">(</span><span class="va">tolower</span>, <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html">everything</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span>                      <span class="co">## make them all lowercase</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename_with</a></span><span class="op">(</span><span class="op">~</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_replace.html">str_replace_all</a></span><span class="op">(</span><span class="va">.</span>, <span class="st">" "</span>, <span class="st">"_"</span><span class="op">)</span>, <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html">everything</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>  <span class="co">## replace ' ' with '_'</span></span>
+<span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">ss_nn_tbl</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div data-pagedtable="false">
@@ -285,26 +305,25 @@ Section 1 Section 2 Section 3 Section 4
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-note callout-titled" title="Purrr Formula Syntax">
+<div class="callout callout-style-default callout-note callout-titled" title="Purrr Function Syntax">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Purrr Formula Syntax
+Purrr Function Syntax
 </div>
 </div>
 <div class="callout-body-container callout-body">
 <p>A function that begins with a tilda is what’s known as ‘purrr function syntax’. For example:</p>
 <p><code>~ str_replace_all(., " ", "_")</code></p>
-<p>Purrr function syntax is commonly used as a shorthand way to pass functions as arguments in the tidyverse functions. The <code>.</code> is the placeholder for the data is being passed to the function.</p>
+<p>Purrr function syntax is commonly used as a shorthand way to pass functions as arguments in the tidyverse functions. The <code>~</code> indicates that this is a function being written as a formula, and the <code>.</code> is the placeholder for the data is being passed to the function.</p>
 </div>
 </div>
 </section><section id="plot-the-distribution-of-quiz-1-scores" class="level2"><h2 class="anchored" data-anchor-id="plot-the-distribution-of-quiz-1-scores">Plot the Distribution of Quiz 1 Scores</h2>
-<section id="extract-just-the-quiz-1-scores" class="level3"><h3 class="anchored" data-anchor-id="extract-just-the-quiz-1-scores">Extract just the Quiz 1 scores</h3>
 <p>First, we pull out just the first quiz scores:</p>
 <div class="cell">
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ss_q1_tbl</span> <span class="op">&lt;-</span> <span class="va">ss_nn_tbl</span> <span class="op">|&gt;</span> </span>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ss_q1_tbl</span> <span class="op">&lt;-</span> <span class="va">ss_nn_tbl</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">name</span>, <span class="va">section</span>, <span class="va">treatment</span>, <span class="va">quiz_01</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">ss_q1_tbl</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -315,19 +334,30 @@ Purrr Formula Syntax
 </div>
 </div>
 </div>
-</section><section id="challenge-1" class="level3"><h3 class="anchored" data-anchor-id="challenge-1">CHALLENGE</h3>
-<ol start="4" type="1">
-<li>How many students missed the first quiz?</li>
-</ol>
-<div class="cell">
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## Your answer here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p><br></p>
-</section></section><section id="create-box-and-whiskers-plots" class="level2"><h2 class="anchored" data-anchor-id="create-box-and-whiskers-plots">Create Box-and-Whiskers Plots</h2>
-<p>Create box-and-whiskers plots for Quiz 1:</p>
+<p>Create a histogram of Quiz 1 scores:</p>
 <div class="cell">
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">ss_q1_tbl</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">quiz_01</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html">geom_histogram</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Quiz 1 Scores"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 20 rows containing non-finite outside the scale range
+(`stat_bin()`).</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="ex01_import-clean-explore-resample_files/figure-html/chunk12-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><br></p>
+<p>Create box-and-whiskers plots for Quiz 1:</p>
+<div class="cell">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">ss_q1_tbl</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">quiz_01</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Quiz 1 Scores"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
@@ -336,7 +366,7 @@ Purrr Formula Syntax
 </div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><img src="ex01_import-clean-data_files/figure-html/chunk12-1.png" class="img-fluid figure-img" width="672"></p>
+<figure class="figure"><p><img src="ex01_import-clean-explore-resample_files/figure-html/chunk13-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -344,7 +374,7 @@ Purrr Formula Syntax
 <p><br></p>
 <p>Next, let’s break that out by section:</p>
 <div class="cell">
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">ss_q1_tbl</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">quiz_01</span>, x <span class="op">=</span> <span class="va">section</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">ss_q1_tbl</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">quiz_01</span>, x <span class="op">=</span> <span class="va">section</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Quiz 1 Scores by Section"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
@@ -353,24 +383,24 @@ Purrr Formula Syntax
 </div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><img src="ex01_import-clean-data_files/figure-html/chunk13-1.png" class="img-fluid figure-img" width="672"></p>
+<figure class="figure"><p><img src="ex01_import-clean-explore-resample_files/figure-html/chunk14-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 <p><br></p>
-<section id="challenge-2" class="level3"><h3 class="anchored" data-anchor-id="challenge-2">CHALLENGE</h3>
-<ol start="5" type="1">
-<li>Create box-and-whiskers plots of the quiz 1 scores by treatment group</li>
+<section id="challenge-1" class="level3"><h3 class="anchored" data-anchor-id="challenge-1">CHALLENGE</h3>
+<ol start="3" type="1">
+<li>Create box-and-whiskers plots of the quiz 1 scores by treatment group. (<a href="https://bit.ly/4hboQsY">solution</a>)</li>
 </ol>
 <div class="cell">
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## Your answer here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## Your answer here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><br></p>
-</section></section><section id="explore-the-top-and-bottom-scores" class="level2"><h2 class="anchored" data-anchor-id="explore-the-top-and-bottom-scores">Explore the Top and Bottom Scores</h2>
+</section></section><section id="explore-the-top-scores" class="level2"><h2 class="anchored" data-anchor-id="explore-the-top-scores">Explore the Top Scores</h2>
 <p>Lets sort the data by <code>quiz_01</code>:</p>
 <div class="cell">
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ss_q1_tbl</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">quiz_01</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ss_q1_tbl</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">quiz_01</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div data-pagedtable="false">
   <script data-pagedtable-source="" type="application/json">
@@ -382,7 +412,7 @@ Purrr Formula Syntax
 <p><br></p>
 <p>We can find the <strong>‘top n records’</strong> using <code><a href="https://dplyr.tidyverse.org/reference/slice.html">slice_max()</a></code> with the <code>n</code> argument:</p>
 <div class="cell">
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## Top 10 records</span></span>
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## Top 10 records</span></span>
 <span><span class="va">ss_q1_tbl</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html">slice_max</a></span><span class="op">(</span>order_by <span class="op">=</span> <span class="va">quiz_01</span>, n <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div data-pagedtable="false">
@@ -393,9 +423,9 @@ Purrr Formula Syntax
 </div>
 </div>
 <p><br></p>
-<p>We can find the <strong>‘top n-percent’</strong> of records using <code><a href="https://dplyr.tidyverse.org/reference/slice.html">slice_max()</a></code> with the <code>prob</code> argument:</p>
+<p>We can find the <strong>‘top n-percent’</strong> of records using <code><a href="https://dplyr.tidyverse.org/reference/slice.html">slice_max()</a></code> with the <code>prop</code> argument:</p>
 <div class="cell">
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## Top 15% of records</span></span>
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## Top 15% of records</span></span>
 <span><span class="va">ss_q1_tbl</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html">slice_max</a></span><span class="op">(</span>order_by <span class="op">=</span> <span class="va">quiz_01</span>, prop <span class="op">=</span> <span class="fl">0.15</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div data-pagedtable="false">
@@ -405,13 +435,13 @@ Purrr Formula Syntax
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-tip callout-titled" title="Top Records">
+<div class="callout callout-style-default callout-tip callout-titled" title="Bottom Records">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Top Records
+Bottom Records
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -421,30 +451,38 @@ Top Records
 <p><br></p>
 <p>How many students got 100%?</p>
 <div class="cell">
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ss_q1_tbl</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">quiz_01</span> <span class="op">==</span> <span class="fl">100</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ss_q1_tbl</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">quiz_01</span> <span class="op">==</span> <span class="fl">100</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 7</code></pre>
 </div>
 </div>
-<section id="challenge-3" class="level3"><h3 class="anchored" data-anchor-id="challenge-3">CHALLENGE</h3>
-<ol start="6" type="1">
-<li>How many students got 90 or higher?</li>
-</ol>
+<p><br></p>
+<p>How many students in Section 1 got 100%?</p>
 <div class="cell">
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## Your answer here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ss_q1_tbl</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">section</span> <span class="op">==</span> <span class="st">"Section 1"</span>, <span class="va">quiz_01</span> <span class="op">==</span> <span class="fl">100</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4</code></pre>
 </div>
-<ol start="7" type="1">
-<li>How many students got scores between 80-89?</li>
+</div>
+<section id="challenge-2" class="level3"><h3 class="anchored" data-anchor-id="challenge-2">CHALLENGE</h3>
+<ol start="4" type="1">
+<li>How many students got 90 or higher? (<a href="https://bit.ly/4h5j0ct">solution</a>)</li>
 </ol>
 <div class="cell">
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## Your answer here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## Your answer here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="5" type="1">
+<li>How many students got scores between 80-89? (<a href="https://bit.ly/4h4xt8C">solution</a>)</li>
+</ol>
+<div class="cell">
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## Your answer here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><br></p>
-</section></section><section id="compute-rank" class="level2"><h2 class="anchored" data-anchor-id="compute-rank">Compute Rank</h2>
+</section></section><section id="compute-ranks" class="level2"><h2 class="anchored" data-anchor-id="compute-ranks">Compute Ranks</h2>
 <p>To add a column for the student rank, we can use <code><a href="https://dplyr.tidyverse.org/reference/row_number.html">dplyr::min_rank()</a></code>:</p>
 <div class="cell">
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ss_q1_rank_tbl</span> <span class="op">&lt;-</span> <span class="va">ss_q1_tbl</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>quiz_01_rank <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/row_number.html">min_rank</a></span><span class="op">(</span><span class="op">-</span><span class="va">quiz_01</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ss_q1_rank_tbl</span> <span class="op">&lt;-</span> <span class="va">ss_q1_tbl</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>quiz_01_rank <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/row_number.html">min_rank</a></span><span class="op">(</span><span class="op">-</span><span class="va">quiz_01</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">quiz_01_rank</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># ss_q1_rank_tbl |&gt; View()</span></span>
@@ -467,15 +505,15 @@ Rank Options
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>To assign ranks from largest to smallest values in a column, add the minus sign. E.g., <code>min_rank(-quiz_01)</code></p>
-<p>There are other ways to handle ties. See help.</p>
+<p>To assign ranks from largest to smallest values in a column, add the minus sign (e.g., <code>min_rank(-quiz_01)</code>) or wrap it in desc() (e.g., <code>min_rank(desc(quiz_01))</code>).</p>
+<p>There are several ways to handle ties. See help.</p>
 </div>
 </div>
 <p><br></p>
 </section><section id="flag-failing-students" class="level2"><h2 class="anchored" data-anchor-id="flag-failing-students">Flag Failing Students</h2>
-<p>Let’s look at the students who failed quiz 1:</p>
+<p>Let’s look at the students who failed Quiz 1:</p>
 <div class="cell">
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ss_q1_tbl</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">quiz_01</span> <span class="op">&lt;</span> <span class="fl">60</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ss_q1_tbl</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">quiz_01</span> <span class="op">&lt;</span> <span class="fl">60</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div data-pagedtable="false">
   <script data-pagedtable-source="" type="application/json">
@@ -487,7 +525,7 @@ Rank Options
 <p><br></p>
 <p>If we want to add a flag for failing quiz 1 in the table, we could add a logical column to the table:</p>
 <div class="cell">
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ss_q1_fail_tbl</span> <span class="op">&lt;-</span> <span class="va">ss_q1_tbl</span> <span class="op">|&gt;</span> </span>
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ss_q1_fail_tbl</span> <span class="op">&lt;-</span> <span class="va">ss_q1_tbl</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>quiz_01_fail <span class="op">=</span> <span class="va">quiz_01</span> <span class="op">&lt;</span> <span class="fl">60</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">ss_q1_fail_tbl</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -500,9 +538,9 @@ Rank Options
 </div>
 </div>
 <p><br></p>
-<p>Alternately we can create a character column that says ‘pass’ or ‘fail’:</p>
+<p>Alternately we can create a character column that says ‘pass’ or ‘fail’ by using <code><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else()</a></code> within <code><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate()</a></code>:</p>
 <div class="cell">
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ss_q1_passfail_tbl</span> <span class="op">&lt;-</span> <span class="va">ss_q1_tbl</span> <span class="op">|&gt;</span> </span>
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ss_q1_passfail_tbl</span> <span class="op">&lt;-</span> <span class="va">ss_q1_tbl</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>quiz_01_passfail <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else</a></span><span class="op">(</span><span class="va">quiz_01</span> <span class="op">&lt;</span> <span class="fl">60</span>, <span class="st">"fail"</span>, <span class="st">"pass"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">ss_q1_passfail_tbl</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">20</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -528,10 +566,11 @@ If Else
 </div>
 <p><br></p>
 </section><section id="assign-letter-grades" class="level2"><h2 class="anchored" data-anchor-id="assign-letter-grades">Assign Letter Grades</h2>
-<p>Assigning letter grades is a little trickier than determining pass vs.&nbsp;fail, because there are several ‘bins’ to consider.</p>
-<p><code><a href="https://dplyr.tidyverse.org/reference/case_when.html">case_when()</a></code> is like <code><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else()</a></code>, but it can handle an arbitrary number of conditions:</p>
+<p>Assigning grades is an example of <strong>resampling the data</strong> (in this case using bins).</p>
+<p>Assigning letter grades a little trickier than pass vs.&nbsp;fail, because instead of two bins are there are multiple criteria to check.</p>
+<p><code><a href="https://dplyr.tidyverse.org/reference/case_when.html">case_when()</a></code> is like <code><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else()</a></code>, but it can handle an arbitrary number of conditional expressions:</p>
 <div class="cell">
-<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ss_q1_grd_tbl</span> <span class="op">&lt;-</span> <span class="va">ss_q1_tbl</span> <span class="op">|&gt;</span> </span>
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ss_q1_grd_tbl</span> <span class="op">&lt;-</span> <span class="va">ss_q1_tbl</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>quiz_01_grd <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html">case_when</a></span><span class="op">(</span></span>
 <span>    <span class="va">quiz_01</span> <span class="op">&lt;</span> <span class="fl">60</span> <span class="op">~</span> <span class="st">"fail"</span>,</span>
 <span>    <span class="va">quiz_01</span> <span class="op">&lt;</span> <span class="fl">70</span> <span class="op">~</span> <span class="st">"D"</span>,</span>
@@ -552,17 +591,17 @@ If Else
 </div>
 </div>
 <p><strong>Oh dear!</strong> Our mutate expression gave students who didn’t show up an A+!! Do you see why?</p>
-<section id="challenge-4" class="level3"><h3 class="anchored" data-anchor-id="challenge-4">CHALLENGE</h3>
-<ol start="7" type="1">
-<li>Fix the expression so that <code>NA</code> scores also get a letter grade of <code>NA</code>.</li>
+<section id="challenge-3" class="level3"><h3 class="anchored" data-anchor-id="challenge-3">CHALLENGE</h3>
+<ol start="6" type="1">
+<li>Fix the expression so that <code>NA</code> scores also get a letter grade of <code>NA</code>. (<a href="https://bit.ly/48tkD1s">solution</a>)</li>
 </ol>
 <div class="cell">
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## Your answer here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## Your answer here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><br></p>
 <p>How many of each grade were given:</p>
 <div class="cell">
-<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ss_q1_grd_tbl</span><span class="op">$</span><span class="va">quiz_01_grd</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ss_q1_grd_tbl</span><span class="op">$</span><span class="va">quiz_01_grd</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
    A   A+    B    C    D fail 
@@ -570,22 +609,11 @@ If Else
 </div>
 </div>
 </section></section><section id="split-first-and-last-name" class="level2"><h2 class="anchored" data-anchor-id="split-first-and-last-name">Split First and Last Name</h2>
-<p>We can use <code><a href="https://stringr.tidyverse.org/reference/str_split.html">stringr::str_split_i()</a></code> with <code>mutate</code> to separate first and last name into separate columns:</p>
-<div class="callout callout-style-default callout-tip callout-titled" title="Splitting Strings">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Splitting Strings
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>When you split strings you may also have to trim leading and trailing white space from the resulting pieces (with <code><a href="https://stringr.tidyverse.org/reference/str_trim.html">str_trim()</a></code>).</p>
-</div>
-</div>
+<section id="split-using-mutate-str_split_i" class="level3"><h3 class="anchored" data-anchor-id="split-using-mutate-str_split_i">Split using <code>mutate()</code> + <code>str_split_i()</code>
+</h3>
+<p>We can use <code><a href="https://stringr.tidyverse.org/reference/str_split.html">stringr::str_split_i()</a></code> with <code><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate()</a></code> to separate first and last name into separate columns:</p>
 <div class="cell">
-<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://stringr.tidyverse.org">stringr</a></span><span class="op">)</span></span>
+<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://stringr.tidyverse.org">stringr</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">ss_q1_firstlast_tbl</span> <span class="op">&lt;-</span> <span class="va">ss_q1_grd_tbl</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>first_name <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_split.html">str_split_i</a></span><span class="op">(</span><span class="va">name</span>, pattern <span class="op">=</span> <span class="st">","</span>, i <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span>
@@ -601,20 +629,25 @@ Splitting Strings
 </div>
 </div>
 </div>
-<p><br></p>
-<div class="callout callout-style-default callout-tip callout-titled" title="separate_wider_delim()">
+<div class="callout callout-style-default callout-tip callout-titled" title="Splitting Strings">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-separate_wider_delim()
+Splitting Strings
 </div>
 </div>
 <div class="callout-body-container callout-body">
+<p>When you split strings you may also have to trim leading and trailing white space from the resulting pieces (with <code><a href="https://stringr.tidyverse.org/reference/str_trim.html">str_trim()</a></code>).</p>
+</div>
+</div>
+<p><br></p>
+</section><section id="split-using-separate_wider_delim" class="level3"><h3 class="anchored" data-anchor-id="split-using-separate_wider_delim">Split using <code>separate_wider_delim()</code>
+</h3>
 <p>We can also split columns using <code><a href="https://tidyr.tidyverse.org/reference/separate_wider_delim.html">tidyr::separate_wider_delim()</a></code>. This function also removes the column that got split up.</p>
 <div class="cell">
-<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org">tidyr</a></span><span class="op">)</span></span>
+<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org">tidyr</a></span><span class="op">)</span></span>
 <span><span class="va">ss_q1_firstlast2_tbl</span> <span class="op">&lt;-</span> <span class="va">ss_q1_grd_tbl</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/separate_wider_delim.html">separate_wider_delim</a></span><span class="op">(</span></span>
 <span>    cols <span class="op">=</span> <span class="st">"name"</span>,</span>
@@ -631,11 +664,12 @@ separate_wider_delim()
 </div>
 </div>
 </div>
-</div>
-</div>
-</section><section id="save-the-grades-for-quiz-1-to-disk" class="level2"><h2 class="anchored" data-anchor-id="save-the-grades-for-quiz-1-to-disk">Save the grades for Quiz 1 to disk</h2>
+<p><br></p>
+</section></section><section id="save-the-grade-sheet-for-quiz-1-to-disk" class="level2"><h2 class="anchored" data-anchor-id="save-the-grade-sheet-for-quiz-1-to-disk">Save the grade sheet for Quiz 1 to disk</h2>
+<p>To save a data frame to disk, we can use <code><a href="https://readr.tidyverse.org/reference/write_delim.html">readr::write_tsv()</a></code>.</p>
+<p><code><a href="https://readr.tidyverse.org/reference/write_delim.html">write_tsv()</a></code> expects a data frame as its first argument, so we can throw it at the end of a pipe chain.</p>
 <div class="cell">
-<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">grades_fn</span> <span class="op">&lt;-</span> <span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org/reference/here.html">here</a></span><span class="op">(</span><span class="st">"exercises/quiz01_grades.tsv"</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">grades_fn</span> <span class="op">&lt;-</span> <span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org/reference/here.html">here</a></span><span class="op">(</span><span class="st">"exercises/quiz01_grades.tsv"</span><span class="op">)</span></span>
 <span><span class="va">ss_q1_firstlast_tbl</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">first_name</span>, <span class="va">last_name</span>, <span class="va">section</span>, <span class="va">quiz_01</span>, <span class="va">quiz_01_grd</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">last_name</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
@@ -652,33 +686,33 @@ File Formats
 </div>
 <div class="callout-body-container callout-body">
 <p>There are more formats out there than csv!</p>
-<p><code>tsv</code> has several advantages - it handles embedded commas better, international formatting settings that use commas as the decimal place, etc.</p>
+<p><code>tsv</code> has several advantages - it handles embedded commas better, more compatible with international formats that use commas as the decimal place, etc.</p>
 </div>
 </div>
-<section id="challenge-5" class="level3"><h3 class="anchored" data-anchor-id="challenge-5">CHALLENGE</h3>
-<ol start="8" type="1">
+<section id="challenge-4" class="level3"><h3 class="anchored" data-anchor-id="challenge-4">CHALLENGE</h3>
+<ol start="7" type="1">
 <li>
-<p>Curve the scores by applying the following transformation:</p>
-<p>curved_score = sqrt(raw_score) * 10</p>
+<p>Curve the scores by applying the following transformation: (<a href="https://bit.ly/4n83s9n">solution</a>)</p>
+<p><code>curved_score = sqrt(raw_score) * 10</code></p>
 </li>
 </ol>
 <div class="cell">
-<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## Your answer here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## Your answer here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="8" type="1">
+<li>How does this curve affect the distribution of grades? (<a href="https://bit.ly/4hgH7oU">solution</a>)</li>
+</ol>
+<div class="cell">
+<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## Your answer here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ol start="9" type="1">
-<li>How does this curve affect the distribution of grades?</li>
+<li>Create a new column containing the height in meters for all students. (<a href="https://bit.ly/3W5OF3Y">solution</a>)</li>
 </ol>
 <div class="cell">
-<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## Your answer here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<ol start="10" type="1">
-<li>Create a numeric column containing the height in inches for all students</li>
-</ol>
-<div class="cell">
-<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## Your answer here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## Your answer here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section></section><section id="done" class="level2"><h2 class="anchored" data-anchor-id="done">DONE!</h2>
-<p>Remember to render your Quarto document so you have a pretty HTML file to keep for future reference.</p>
+<p>Remember to render your document so you have a pretty HTML file to keep for future reference.</p>
 </section></main><!-- /main column --><script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";

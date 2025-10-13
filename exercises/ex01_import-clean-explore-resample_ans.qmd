@@ -1,0 +1,538 @@
+---
+title: "Data Wrangling Exercise 1"
+subtitle: "Import Data, Clean, Explore, Resample & Split Columns"
+format:
+  html:
+    df-print: paged
+    code-link: true
+    toc: true
+    toc-expand: 3
+editor: source
+---
+
+## Importing Messy Excel Data
+
+Although your data may be in a spreadsheet or CSV file, it may not be in an ideal format. 
+
+See for example this (fake) registration list:
+
+```{r chunk01, echo=FALSE}
+knitr::include_graphics(here::here("exercises/images/reg_list_excel_1500x600.png"))
+```
+
+Here we see:
+
+- a bunch of stuff before the data  
+- unwieldy column "names"  
+- several extra columns we don't need, missing values, etc.  
+
+We can tackle many of these issues when we import the data. First, we construct the file name and verify it exists:
+
+```{r chunk02}
+reg_list_fn <- here::here("./exercises/data/SurveyResults_36100.xlsx")
+file.exists(reg_list_fn)
+```
+
+To import Excel files, we'll go to `read_xlsx()` from the *readxl* package. (This function has **a lot** of options, so it's worth reading the help page.)
+
+```{r chunk03}
+library(readxl)
+reg_list_tbl <- read_xlsx(path = reg_list_fn, 
+                         sheet = "Survey Output", 
+                         skip = 3, 
+                         col_names = c("user", "reg_date", "fname", "lname", "email", 
+                                       "title", "arcgis", "cosponsor_org", "allergies"),
+                         col_types = c("text", "text", "text", "text", "text", 
+                                       "text", "numeric", "text", "text"))
+reg_list_tbl
+```
+
+And just like that, our data are ready to work with!
+
+Similarly, [readr](https://readr.tidyverse.org/) provides super-charged functions for importing and exporting rectangular data in text formats.
+
+## Import Pop-Quiz Data
+
+The dataset we'll use for the rest of the exercise is fake data from weekly pop-quizzes in an undergraduate class. These data were collected as part of a study on improving learning through two interventions, plus a control group.
+
+In addition to the quiz scores for each student, the data includes some additional info about the students, including their discussion section, major(s), year, sex, and height.
+
+The data are saved in a tab-separated-value format:
+
+```{r chunk04}
+library(readr)
+ss_fn <- here::here("./exercises/data/student_scores.tsv"); file.exists(ss_fn)
+ss_tbl <- readr::read_tsv(file = ss_fn)
+```
+\
+
+## Explore the Data
+
+Let's see what we got!
+
+```{r chunk05}
+## Number of rows and columns
+dim(ss_tbl)
+
+## Column names
+names(ss_tbl)
+
+## First six rows
+head(ss_tbl)
+
+# Open it in RStudio
+# View(ss_tbl)
+```
+
+\
+
+What are the values in the `Section` column?
+
+```{r chunk06}
+table(ss_tbl$Section)
+```
+\
+
+### CHALLENGE
+
+1) What are the values in the Treatment column? ([solution](https://bit.ly/4ogoG5W))
+
+```{r chunk07}
+## What are the values in the Treatment column?
+
+table(ss_tbl$Treatment)
+```
+
+2) What is the distribution of values in the Year column? ([solution](https://bit.ly/46OlyZ5))
+
+```{r chunk08}
+## What is the distribution of values in the Year column?
+
+## All of the following could be used to show the distribution of an integer variable:
+
+summary(ss_tbl$Year)
+
+table(ss_tbl$Year)
+
+hist(ss_tbl$Year)
+```
+
+\
+
+## Clean up the column names
+
+Let's start by making the column names a little easier to work with by: 
+
+- making them all lowercase
+- replacing spaces with underscores
+
+We can use the `dplyr` and `stringr` packages for this:
+
+```{r chunk09}
+library(dplyr, warn.conflicts = FALSE)
+
+## Avoid function name classes
+library(conflicted)
+conflicts_prefer(
+  dplyr::select,
+  dplyr::filter,
+  dplyr::arrange
+)
+library(stringr)
+```
+
+To apply a transformation (i.e., function) to all column names, we can use `dplyr::rename_with()`. 
+
+The arguments to `rename_with()` should include:
+
+i) a function to apply to each column name  
+ii) a tidyselect expression which specifies which columns to alter
+
+
+```{r chunk10}
+ss_nn_tbl <- ss_tbl |> 
+  rename_with(tolower, everything()) |>                      ## make them all lowercase
+  rename_with(~ str_replace_all(., " ", "_"), everything())  ## replace ' ' with '_'
+
+head(ss_nn_tbl)
+```
+
+::: {.callout-note title="Purrr Function Syntax"}
+
+A function that begins with a tilda is what's known as 'purrr function syntax'. For example:
+
+`~ str_replace_all(., " ", "_")`
+
+Purrr function syntax is commonly used as a shorthand way to pass functions as arguments in the tidyverse functions. The `~` indicates that this is a function being written as a formula, and the `.` is the placeholder for the data is being passed to the function.
+:::
+
+## Plot the Distribution of Quiz 1 Scores
+
+First, we pull out just the first quiz scores:
+
+```{r chunk11}
+ss_q1_tbl <- ss_nn_tbl |> 
+  select(name, section, treatment, quiz_01)
+head(ss_q1_tbl)
+```
+
+Create a histogram of Quiz 1 scores:
+
+```{r chunk12}
+library(ggplot2)
+ggplot(ss_q1_tbl, aes(y = quiz_01)) +
+  geom_histogram() +
+  labs(title = "Quiz 1 Scores")
+```
+
+\
+
+Create box-and-whiskers plots for Quiz 1:
+
+```{r chunk13}
+ggplot(ss_q1_tbl, aes(y = quiz_01)) +
+  geom_boxplot() +
+  labs(title = "Quiz 1 Scores")
+```
+
+
+\
+
+Next, let's break that out by section:
+
+```{r chunk14}
+ggplot(ss_q1_tbl, aes(y = quiz_01, x = section)) +
+  geom_boxplot() +
+  labs(title = "Quiz 1 Scores by Section")
+```
+
+\
+
+### CHALLENGE
+
+3) Create box-and-whiskers plots of the quiz 1 scores by treatment group. ([solution](https://bit.ly/4hboQsY))
+
+```{r chunk15}
+## Create box-and-whiskers plots of the quiz 1 scores by treatment group
+
+ggplot(ss_q1_tbl, aes(y = quiz_01, x = treatment)) +
+  geom_boxplot() +
+  labs(title = "Quiz 1 Scores by Treatment Group")
+```
+
+\
+
+## Explore the Top Scores
+
+Lets sort the data by `quiz_01`:
+
+```{r chunk16}
+ss_q1_tbl |> arrange(desc(quiz_01))
+```
+
+\
+
+We can find the **'top n records'** using `slice_max()` with the `n` argument:
+
+```{r chunk17}
+## Top 10 records
+ss_q1_tbl |> dplyr::slice_max(order_by = quiz_01, n = 10)
+```
+
+\
+
+We can find the **'top n-percent'** of records using `slice_max()` with the `prop` argument:
+
+```{r chunk18}
+## Top 15% of records
+ss_q1_tbl |> dplyr::slice_max(order_by = quiz_01, prop = 0.15)
+```
+
+::: {.callout-tip title="Bottom Records"}
+To get the bottom records, use `slice_min()`.
+:::
+
+\
+
+How many students got 100%?
+
+```{r chunk19}
+ss_q1_tbl |> filter(quiz_01 == 100) |> nrow()
+```
+
+\
+
+How many students in Section 1 got 100%?
+
+```{r chunk20}
+ss_q1_tbl |> filter(section == "Section 1", quiz_01 == 100) |> nrow()
+```
+
+
+### CHALLENGE
+
+4) How many students got 90 or higher? ([solution](https://bit.ly/4h5j0ct))
+
+```{r chunk21}
+## How many students got 90 or higher?
+
+ss_q1_tbl |> filter(quiz_01 >= 90) |> nrow()
+```
+
+5) How many students got scores between 80-89? ([solution](https://bit.ly/4h4xt8C))
+
+```{r chunk22}
+## How many students got scores between 80-89?
+
+ss_q1_tbl |> filter(quiz_01 >= 80) |> filter(quiz_01 <= 89) |> nrow()
+
+ss_q1_tbl |> filter(quiz_01 >= 80, quiz_01 <= 89) |> nrow()
+
+ss_q1_tbl |> filter(quiz_01 >= 80 & quiz_01 <= 89) |> nrow()
+
+ss_q1_tbl |> filter(between(quiz_01, 80, 89)) |> nrow()
+```
+
+\
+
+## Compute Ranks
+
+To add a column for the student rank, we can use `dplyr::min_rank()`:
+
+```{r chunk23}
+ss_q1_rank_tbl <- ss_q1_tbl |> 
+  mutate(quiz_01_rank = min_rank(-quiz_01)) |>
+  arrange(quiz_01_rank)
+
+# ss_q1_rank_tbl |> View()
+ss_q1_rank_tbl |> slice(1:20)
+```
+
+::: {.callout-tip title="Rank Options"}
+To assign ranks from largest to smallest values in a column, add the minus sign (e.g., `min_rank(-quiz_01)`) or wrap it in desc() (e.g., `min_rank(desc(quiz_01))`).
+
+There are several ways to handle ties. See help.
+:::
+
+\
+
+## Flag Failing Students
+
+Let's look at the students who failed Quiz 1:
+
+```{r chunk24}
+ss_q1_tbl |> filter(quiz_01 < 60)
+```
+  
+\
+
+If we want to add a flag for failing quiz 1 in the table, we could add a logical column to the table:
+
+```{r chunk25}
+ss_q1_fail_tbl <- ss_q1_tbl |> 
+  mutate(quiz_01_fail = quiz_01 < 60)
+
+ss_q1_fail_tbl |> slice(1:30)
+```
+
+\
+
+Alternately we can create a character column that says 'pass' or 'fail' by using `if_else()` within `mutate()`:
+
+```{r chunk26}
+ss_q1_passfail_tbl <- ss_q1_tbl |> 
+  mutate(quiz_01_passfail = if_else(quiz_01 < 60, "fail", "pass"))
+ss_q1_passfail_tbl |> slice(1:20)
+```
+
+::: {.callout-tip title="If Else"}
+`dplyr::if_else()` is a vectorized form of `base::ifelse()`.
+:::
+
+\
+
+## Assign Letter Grades
+
+Assigning grades is an example of **resampling the data** (in this case using bins).
+
+Assigning letter grades a little trickier than pass vs. fail, because instead of two bins are there are multiple criteria to check.
+
+`case_when()` is like `if_else()`, but it can handle an arbitrary number of conditional expressions:
+
+```{r chunk27}
+ss_q1_grd_tbl <- ss_q1_tbl |> 
+  mutate(quiz_01_grd = case_when(
+    quiz_01 < 60 ~ "fail",
+    quiz_01 < 70 ~ "D",
+    quiz_01 < 80 ~ "C",
+    quiz_01 < 90 ~ "B",
+    quiz_01 < 100 ~ "A",
+    .default = "A+"
+  ))
+
+# ss_q1_grd_tbl |> View()
+ss_q1_grd_tbl |> slice(1:20)
+```
+
+__Oh dear!__ Our mutate expression gave students who didn't show up an A+!! Do you see why?
+
+### CHALLENGE
+
+6) Fix the expression so that `NA` scores also get a letter grade of `NA`. ([solution](https://bit.ly/48tkD1s))
+
+```{r chunk28}
+## Fix the expression so that `NA` scores also get a letter grade of `NA`.
+
+ss_q1_grd_tbl <- ss_q1_tbl |> 
+  mutate(quiz_01_grd = case_when(
+    quiz_01 < 60 ~ "fail",
+    quiz_01 < 70 ~ "D",
+    quiz_01 < 80 ~ "C",
+    quiz_01 < 90 ~ "B",
+    quiz_01 < 100 ~ "A",
+    is.na(quiz_01) ~ NA,
+    .default = "A+"
+  ))
+ss_q1_grd_tbl |> slice(1:20)
+```
+
+\
+
+How many of each grade were given:
+
+```{r chunk29}
+ss_q1_grd_tbl$quiz_01_grd |> table()
+```
+
+## Split First and Last Name 
+
+### Split using `mutate()` + `str_split_i()`
+
+We can use `stringr::str_split_i()` with `mutate()` to separate first and last name into separate columns:
+
+```{r chunk30}
+library(stringr)
+
+ss_q1_firstlast_tbl <- ss_q1_grd_tbl |> 
+  mutate(first_name = str_split_i(name, pattern = ",", i = 2),
+         last_name = str_split_i(name, pattern = ",", i = 1)) |> 
+  mutate(first_name = str_trim(first_name))
+
+ss_q1_firstlast_tbl |> head()
+```
+
+::: {.callout-tip title="Splitting Strings"}
+When you split strings you may also have to trim leading and trailing white space from the resulting pieces (with `str_trim()`).
+:::
+
+\
+
+### Split using `separate_wider_delim()`
+
+We can also split columns using `tidyr::separate_wider_delim()`. This function also removes the column that got split up.
+
+```{r chunk31}
+library(tidyr)
+ss_q1_firstlast2_tbl <- ss_q1_grd_tbl |> 
+  tidyr::separate_wider_delim(
+    cols = "name",
+    delim = ", ",
+    names = c("last_name", "first_name")
+  )
+
+head(ss_q1_firstlast2_tbl)
+```
+
+\
+
+## Save the grade sheet for Quiz 1 to disk
+
+To save a data frame to disk, we can use `readr::write_tsv()`.
+
+`write_tsv()` expects a data frame as its first argument, so we can throw it at the end of a pipe chain.
+
+```{r chunk32}
+grades_fn <- here::here("exercises/quiz01_grades.tsv")
+ss_q1_firstlast_tbl |> 
+  select(first_name, last_name, section, quiz_01, quiz_01_grd) |> 
+  arrange(last_name) |> 
+  write_tsv(file = grades_fn)
+```
+
+
+::: {.callout-tip title="File Formats"}
+There are more formats out there than csv!
+
+`tsv` has several advantages - it handles embedded commas better, more compatible with international formats that use commas as the decimal place, etc.
+:::
+
+### CHALLENGE 
+
+7) Curve the scores by applying the following transformation:  ([solution](https://bit.ly/4n83s9n))
+
+    `curved_score = sqrt(raw_score) * 10`
+
+```{r chunk33}
+## Curve the scores by applying the following transformation:
+##  curved_score = sqrt(raw_score) * 10
+    
+ss_q1_crv_tbl <- ss_q1_tbl |> 
+  mutate(quiz_01_crv = sqrt(quiz_01) * 10)
+head(ss_q1_crv_tbl)
+```
+
+8) How does this curve affect the distribution of grades? ([solution](https://bit.ly/4hgH7oU))
+
+```{r chunk34}
+## How does this curve affect the distribution of grades?
+  
+ss_q1_crv_grd_tbl <- ss_q1_crv_tbl |> 
+  mutate(quiz_01_grd = case_when(
+    quiz_01_crv < 60 ~ "fail",
+    quiz_01_crv < 70 ~ "D",
+    quiz_01_crv < 80 ~ "C",
+    quiz_01_crv < 90 ~ "B",
+    quiz_01_crv < 100 ~ "A",
+    is.na(quiz_01_crv) ~ NA,
+    .default = "A+"
+  ))
+
+## Curved grade distribution
+ss_q1_crv_grd_tbl$quiz_01_grd |> table()
+
+## Original letter grade distribution:
+ss_q1_grd_tbl$quiz_01_grd |> table()
+```
+
+9) Create a new column containing the height in meters for all students. ([solution](https://bit.ly/3W5OF3Y))
+
+```{r chunk35}
+## Create a new column containing the height in meters for all students
+
+## Step 1. Split the 'height' column into value and units
+ss_height_tbl <- ss_nn_tbl |> 
+  select(name, height) |> 
+  tidyr::separate_wider_delim(
+    cols = "height",
+    delim = " ",
+    names = c("height_val", "height_units"),
+    cols_remove = FALSE
+  ) |> 
+  mutate(height_val = as.numeric(height_val)) |> 
+  select(name, height, height_val, height_units)
+  
+head(ss_height_tbl)
+
+## Step 2. Generate a new column in meters (using the appropriate conversion factor 
+## for the units - in or cm).
+ss_height_m_tbl <- ss_height_tbl |> 
+  mutate(height_m = if_else(height_units == "in",
+                            height_val / 39.37,
+                            height_val / 100))
+head(ss_height_m_tbl)
+```
+
+## DONE!
+
+Remember to render your document so you have a pretty HTML file to keep for future reference.
+

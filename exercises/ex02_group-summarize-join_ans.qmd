@@ -1,0 +1,199 @@
+---
+title: "Data Wrangling Exercise 2"
+subtitle: "Group, Summarize, and Join Data Frames"
+format:
+  html:
+    df-print: paged
+    code-link: true
+    toc: true
+    toc-expand: 3
+editor: source
+---
+
+In this exercise, we'll continue to work with the pop-quiz data using the following techniques:
+
+- group & summarize
+- table joins
+
+## Setup
+
+Load the packages we'll be using:
+
+```{r chunk01, message = FALSE}
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(stringr)
+library(conflicted)
+conflicts_prefer(
+  dplyr::select,
+  dplyr::filter,
+  dplyr::arrange
+)
+```
+
+We'll continue to work with the pop-quiz data we saw in the first exercise. (Note how we can cleanup the column names in the same expression that imports the file):
+
+```{r chunk02}
+ss_fn <- here::here("./exercises/data/student_scores.tsv")
+ss_nn_tbl <- readr::read_tsv(file = ss_fn, show_col_types = FALSE) |> 
+  rename_with(tolower, everything()) |>
+  rename_with(~ str_replace_all(., " ", "_"), everything())
+head(ss_nn_tbl)
+```
+
+For this exercise, we'll also continue to work with the first quiz only:
+
+```{r chunk03}
+ss_q1_tbl <- ss_nn_tbl |> 
+  select(name, section, treatment, quiz_01)
+head(ss_q1_tbl)
+```
+
+## Group and Summarize
+
+Let's compute the number of students per section. We start by grouping the rows by section:
+
+```{r chunk04}
+ss_q1_tbl |> 
+  group_by(section)
+```
+
+**Note:** Simply grouping rows with `group_by()` doesn't do anything useful!
+
+You have to follow it up with something else (usually `summarize()`).
+
+To return the number of rows per group, we can define a new column using `n()`.
+
+```{r chunk05}
+ss_q1_tbl |> 
+  group_by(section) |> 
+  summarize(num_students = n())
+```
+
+::: {.callout-note}
+## Functions you can use in `summarize()`
+
+What gets fed into `summarize()` are groups of rows (one at a time).
+
+Hence, when you define columns in `summarize()`, you have to use functions that can receive multiple values and return just one (i.e., aggregate functions). Common examples include `n()`, `mean()`, `sum()`, `max()`, `first()`, etc. See the 'Summary Functions' on the [`dplyr` cheatsheet](https://rstudio.github.io/cheatsheets/data-transformation.pdf) for others.
+:::
+
+\
+
+Next, compute the average score on Quiz 1 by section:
+
+```{r chunk06}
+ss_q1_tbl |> 
+  group_by(section) |> 
+  summarize(quiz_01_avg = mean(quiz_01, na.rm = TRUE))
+```
+
+### CHALLENGE
+
+1) Compute the average score on Quiz 1 by treatment group. ([solution](https://bit.ly/4n4bkZF))
+
+```{r chunk07}
+ss_q1_tbl |> 
+  group_by(treatment) |> 
+  summarize(quiz_01_avg = mean(quiz_01, na.rm = TRUE))
+```
+
+\
+
+## Group on Multiple Columns
+
+We can group by more than one column. For example, to view the number of students in each treatment group per section:
+
+```{r chunk08}
+ss_q1_tbl |> 
+  group_by(section, treatment) |> 
+  summarize(num_students = n())
+```
+
+### CHALLENGE
+
+2) Compute the number of students per treatment group and sex. ([solution](https://bit.ly/4hfgalu))
+
+```{r chunk09}
+ss_nn_tbl |> 
+  group_by(treatment, sex) |> 
+  summarize(num_students = n())
+```
+
+\
+
+## Join Tables
+
+Joining tables together is extremely useful for wrangling data!
+
+Let's bring in a table with more info about the discussion sections:
+
+```{r chunk10}
+sect_info_fn <- here::here("exercises/data/section_info.tsv")
+sect_info_tbl <- read_tsv(sect_info_fn)
+sect_info_tbl
+```
+
+To join tables on a common column, you can use `dplyr::left_join()`:
+
+```{r chunk11}
+ss_q1_sect_tbl <- ss_q1_tbl |> 
+  left_join(sect_info_tbl, by = "section")
+ss_q1_sect_tbl
+```
+
+\
+
+## Use the New Columns for Summaries
+
+Once the tables are joined, the new columns are available for use.
+
+For each Teaching Assistant, compute the number of students, and their avg on quiz 1.
+
+```{r chunk12}
+ss_q1_sect_tbl |> 
+  group_by(ta) |> 
+  summarise(count = n(), 
+            avg_score = mean(quiz_01, na.rm = TRUE))
+```
+
+### CHALLENGE
+
+3) How many students have discussion on each day of the week? ([solution](https://bit.ly/474tEf0))
+
+```{r chunk13}
+ss_q1_sect_tbl |> 
+  group_by(day) |> 
+  summarise(count = n())
+```
+
+4) Based on Quiz 1, is there any evidence to support the theory that students who have discussion section earlier in the day tend to have better learning outcomes? ([solution](https://bit.ly/4oiHAsR))
+
+```{r chunk14}
+## Is there any evidence to support the theory that students who have discussion section
+## earlier in the day tend to have better learning outcomes?
+
+ss_q1_sect_tbl |> 
+  group_by(time) |> 
+  summarise(avg_score = mean(quiz_01, na.rm = TRUE))
+
+ggplot(ss_q1_sect_tbl, aes(y = quiz_01, x = time)) +
+  geom_point() +
+  labs(title = "Quiz 1 Scores by Discussion Section Hour")
+
+ggplot(ss_q1_sect_tbl, aes(y = quiz_01, x = as.character(time))) +
+  geom_boxplot() +
+  labs(title = "Quiz 1 Scores by Discussion Section Hour")
+
+## Note: While the averages for the 9:00a and 10:00a discussion sections look
+## quite a bit higher than the 2:00p section, when we look at the spread it
+## appears the 2:00p average might have been brought down by two outliers.
+```
+
+\
+
+## DONE!
+
+Remember to render your Quarto document so you have a pretty HTML file to keep for future reference.
+

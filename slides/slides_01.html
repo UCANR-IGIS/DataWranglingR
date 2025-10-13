@@ -177,8 +177,8 @@ style="display:block; margin:1em auto; border:none;" /></p>
 w3c_slidy.mouse_click_enabled = false;
 </script>
 </div>
-<div id="about-me" class="slide section level1">
-<h1>About Me…</h1>
+<div id="about-me..." class="slide section level1">
+<h1>About Me...</h1>
 <p><img src="images/anr_montage-wide_1120x520.png" /></p>
 </div>
 <div id="igis-team" class="slide section level1 hidetitle">
@@ -256,8 +256,8 @@ target="_blank">https://ucanr-igis.shinyapps.io/PondCalc/</a></p>
 <a href="https://ucanr-igis.shinyapps.io/pist_gdd/"
 target="_blank">https://ucanr-igis.shinyapps.io/pist_gdd/</a></p>
 </div>
-<div id="about-you" class="slide section level1">
-<h1>About You…</h1>
+<div id="about-you..." class="slide section level1">
+<h1>About You...</h1>
 </div>
 <div id="data-wrangling-what-do-we-mean" class="slide section level1">
 <h1>Data Wrangling: What do we mean?</h1>
@@ -289,7 +289,7 @@ style="display:block; margin:1em auto; border:none;" /></p>
 </li>
 <li>sorting rows<br />
 </li>
-<li>going from ‘long’ to ‘wide’ formats<br />
+<li>going from 'long' to 'wide' formats<br />
 </li>
 <li>joining data frames based on a common field<br />
 </li>
@@ -302,15 +302,6 @@ style="display:block; margin:1em auto; border:none;" /></p>
 </ol>
 </div>
 </div>
-<p><br />
-</p>
-</div>
-<div id="tools-of-the-trade" class="slide section level1">
-<h1>Tools of the Trade</h1>
-<p><br />
-</p>
-<p><img src="images/bag-of-tricks_618x520.png"
-style="display:block; margin:1em auto; border:none;" /></p>
 <p><br />
 </p>
 <!-------------
@@ -374,13 +365,13 @@ class="subsecttitle-main">Planning Your Data Wrangling
 Strategy</span></h1>
 </div>
 <div id="what-is-tidy-data" class="slide section level1">
-<h1>What is “tidy data”?</h1>
+<h1>What is "tidy data"?</h1>
 <p>R functions like tidy data!</p>
 <p><img src="images/tidy_data_1260x435x256.png"
 style="display:block; margin:1em auto; border:none;" /></p>
 </div>
 <div id="are-these-data-tidy" class="slide section level1">
-<h1>Are these data ‘tidy’?</h1>
+<h1>Are these data 'tidy'?</h1>
 <p><img src="images/are-these-tidy_1286x398x256.png"
 style="display:block; margin:1em auto; border:none;" /></p>
 <p><br />
@@ -393,7 +384,7 @@ style="display:block; margin:1em auto; border:none;" /></p>
 <ul>
 <li>computers programs like it!</li>
 <li>makes data wrangling code really efficient</li>
-<li>many, many R developers are developing ‘tidy-ready’ functions in
+<li>many, many R developers are developing 'tidy-ready' functions in
 their packages</li>
 </ul>
 </div>
@@ -403,7 +394,7 @@ their packages</li>
 <li>if your data are not rectangular</li>
 <li>designing a table for human consumption<br />
 </li>
-<li>simple rowwise calculation (e.g. t1 - t2)<br />
+<li>simple rowwise calculation (e.g. t1 - t2)<br />
 </li>
 <li>if the stats / analysis function requires something specific<br />
 </li>
@@ -424,16 +415,28 @@ class="subsecttitle-main">Data Wrangling Methods</span></h1>
 </div>
 <div id="tidyverse" class="slide section level1">
 <h1>Tidyverse</h1>
+<p><br />
+</p>
+<div
+style="display:flex; flex-flow:row wrap; justify-content:center; align-items:center; column-gap:40px; row-gap:20px;">
+<div>
 <p><img src="images/tidyverse_logo-farm_540x520.png"
 style="display:block; margin:1em auto; border:none;" /></p>
+</div>
+<div>
+<p><img src="images/bag-of-tricks_618x520.png"
+style="display:block; width:400px; margin:1em auto; border:none;" /></p>
+</div>
+</div>
+<!---- side-by-side container ---->
 <p><br />
 </p>
 <p>Install them all at once:</p>
 <div class="indented2 indented2r">
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;tidyverse&quot;</span>)</span></code></pre></div>
 </div>
-<div style="text-align:center;">
 <p>For the complete list of all the tidyverse packages, see:</p>
+<div class="indented2">
 <p><a href="https://tidyverse.tidyverse.org/"
 class="uri">https://tidyverse.tidyverse.org/</a></p>
 </div>
@@ -459,7 +462,9 @@ class="slide section level1">
 <p><img src="images/readr_logo_121x140.png"
 style="margin-left:2em;" /> <img src="images/readxl-logo_121x140.png"
 style="margin-left:2em;" /> <img
-src="images/googlesheets4_140x121.png" style="margin-left:2em;" /></p>
+src="images/googlesheets4_140x121.png" style="margin-left:2em;" />
+<img src="images/haven-logo_121x140.png"
+style="margin-left:2em;" /></p>
 <p><br />
 </p>
 <p>These packages allow you to:</p>
@@ -467,7 +472,7 @@ src="images/googlesheets4_140x121.png" style="margin-left:2em;" /></p>
 <ul>
 <li>import tabular data in different formats<br />
 </li>
-<li>skip rows that don’t actually contain data<br />
+<li>skip rows that don't actually contain data<br />
 </li>
 <li>specify whether the file contains a header<br />
 </li>
@@ -490,8 +495,7 @@ src="images/googlesheets4_140x121.png" style="margin-left:2em;" /></p>
 <p><br />
 </p>
 <div class="centerblock">
-<p><a
-href="https://rawgit.com/rstudio/cheatsheets/master/data-import.pdf"
+<p><a href="https://rstudio.github.io/cheatsheets/data-import.pdf"
 target="_blank" rel="noopener"><img
 src="images/data-import-cheatsheet_600x460x256.png"
 style="border:1px solid grey;" /></a></p>
@@ -783,7 +787,7 @@ ggplot(penguins, <strong>aes(x = flipper_length_mm , y = bill_length_mm , color 
 <li><code>aes()</code> sets the default source for each visual property
 (or aesthetic) of the plot layers
 <ul>
-<li>note you don’t need to put column names in quotes<br />
+<li>note you don't need to put column names in quotes<br />
 </li>
 </ul></li>
 <li>some common visual properties:</li>
@@ -832,7 +836,7 @@ manually specified</li>
 </ul>
 <div class="indented2" style="font-family:monospace;">
 <p>geom_point(col = pop_size)<br />
-geom_point(col = “red”)</p>
+geom_point(col = "red")</p>
 </div>
 <ul>
 <li><p>visual properties are inherited (from
@@ -918,24 +922,57 @@ style="display:block; margin:1em auto; border:none;" /></p>
 </div>
 <div id="highlights-of-exercise-1" class="slide section level1">
 <h1>Highlights of Exercise 1</h1>
-<p>Import data</p>
+<p><strong>Data wrangling starts when you import data</strong></p>
 <div class="indented1 singlespace">
 <ul>
 <li>use <code>readxl</code> or <code>readr</code></li>
 </ul>
 </div>
-<p>Rename columns</p>
+<p><strong>Exploring what you got</strong></p>
 <div class="indented1 singlespace">
 <ul>
-<li>one-by-one: use <code>rename()</code> or <code>select()</code></li>
-<li>apply a function to several at once: use <code>rename_with()</code>
-or <code>rename_all()</code></li>
+<li><code>ggplot()</code> can split up the data for visualization<br />
+</li>
+<li>base R functions: <code>dim()</code>, <code>summarize()</code>,
+<code>table()</code></li>
+<li><code>head()</code>, <code>View()</code><br />
+</li>
 </ul>
 </div>
-<p>Add or modify columns: use <code>mutate()</code> with:</p>
+<p><strong>Renaming columns</strong></p>
+<div class="indented1 singlespace">
+<ul>
+<li>one-by-one: use <code>rename()</code> or <code>select()</code><br />
+</li>
+<li>apply a function to several columns at once: use
+<code>rename_with()</code> or <code>rename_all()</code><br />
+</li>
+</ul>
+</div>
+<p><strong>Subsetting rows and columns</strong></p>
+<div class="indented1 singlespace">
+<ul>
+<li><code>select()</code><br />
+</li>
+<li><code>filter()</code>, <code>slice()</code><br />
+</li>
+</ul>
+</div>
+<p><strong>Exploring the top and bottom values</strong></p>
+<div class="indented1 singlespace">
+<ul>
+<li><code>arrange()</code></li>
+<li><code>slice_max()</code>, <code>slice_min()</code><br />
+</li>
+</ul>
+</div>
+<p><strong>Add or modify columns: <code>mutate()</code>
+with:</strong></p>
 <div class="indented1 singlespace">
 <ul>
 <li>any vectorized function or operator<br />
+</li>
+<li><code>min_rank()</code><br />
 </li>
 <li><code>if_else()</code><br />
 </li>
@@ -943,25 +980,11 @@ or <code>rename_all()</code></li>
 </li>
 </ul>
 </div>
-<p>Splitting columns</p>
+<p><strong>Splitting columns</strong></p>
 <div class="indented1 singlespace">
 <ul>
-<li>mutate with <code>stringr::str_split_i()</code> (and cousins)</li>
-<li><code>tidyr::separate_wider_delim()</code> (and cousins) - more
-flexible</li>
-</ul>
-</div>
-</div>
-<div id="data-file-formats" class="slide section level1">
-<h1>Data File Formats</h1>
-<p>There are better options for storing data than csv!</p>
-<div class="indented1 singlespace">
-<ul>
-<li>RDS - R’s native format</li>
-<li>TSV - tab-separated values</li>
-<li>Feather (binary, column based, cross-platform)</li>
-<li>Parquet (binary, column based, cross-platform)</li>
-<li>DuckDB (relational database)</li>
+<li><code>mutate</code> + <code>stringr::str_split_i()</code></li>
+<li><code>tidyr::separate_wider_delim()</code> - more flexible</li>
 </ul>
 </div>
 <!----------------------
@@ -1001,177 +1024,101 @@ df |>
 
 -------->
 </div>
-<div id="more-dplyr-tips" class="slide section level1">
-<h1>More <code>dplyr</code> Tips</h1>
-<!---------------
-## This comes right after the break
-
-## Need to show them
-
-Applying functions to multiple columns
-
-We can do better than CSV
- - RDS
- - TSV
- - Feather (binary, cross-platform)
- - Parquet
- - DuckDB
-
-## More Advanced filter()
-
-compound expressions
-
------>
-<h2 id="more-advanced-select">More Advanced <code>select()</code></h2>
-<p>You can enter more than just a list of columns in
-<code>select()</code>.</p>
-<p>There’s a whole language of <a
-href="https://tidyselect.r-lib.org/"><code>tidyselect</code></a>
-expressions you can use. Examples:</p>
+<div id="tidy-select-expressions" class="slide section level1">
+<h1>tidy-select Expressions</h1>
+<p><strong>tidy-select</strong> functions can be used to specify columns
+in a data frame.</p>
+<p>These expressions can be used wherever you need to specify columns,
+including:</p>
+<div class="indented1">
+<p><code>select()</code><br />
+<code>rename_with()</code><br />
+<code>mutate(across())</code></p>
+</div>
+<p><strong>Examples</strong></p>
 <table class="tbl_compact">
 <tbody>
 <tr>
 <td style="text-align:left;width: 16em; font-family: monospace;">
-select(-age)
+-student_id
 </td>
 <td style="text-align:left;">
-Select all columns <em>except</em> age
+all columns <em>except</em> age
 </td>
 </tr>
 <tr>
 <td style="text-align:left;width: 16em; font-family: monospace;">
-select(fname:grade)
+quiz_01:quiz10
 </td>
 <td style="text-align:left;">
-Select all columns between <code>fname</code> and <code>grade</code>
+all columns between <code>quiz_01</code> and <code>quiz_10</code>
 </td>
 </tr>
 <tr>
 <td style="text-align:left;width: 16em; font-family: monospace;">
-select(starts_with(“Sepal”))
+starts_with("Quiz")
 </td>
 <td style="text-align:left;">
-Select all columns that start with ‘Sepal’<br>(see also
-<code>ends_width()</code>, <code>contains()</code>, and
-<code>matches()</code>
+all columns that start with 'Quiz'
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 16em; font-family: monospace;">
+contains('cm')
+</td>
+<td style="text-align:left;">
+column names that contain 'cm'
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 16em; font-family: monospace;">
+all_of(c('major', 'gpa'))<br>any_of(c('major', 'gpa'))
+</td>
+<td style="text-align:left;">
+column names stored in a vector
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 16em; font-family: monospace;">
+last_col()
+</td>
+<td style="text-align:left;">
+last column
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 16em; font-family: monospace;">
+everything()
+</td>
+<td style="text-align:left;">
+all columns
 </td>
 </tr>
 </tbody>
 </table>
-<p><br />
-</p>
-<h2 id="renaming-columns">Renaming columns</h2>
-<p>Select can also be used to rename columns:</p>
-<div class="indented2" style="font-family:monospace;">
-<p>my_dataframe |&gt; rename(fname = First, lname = Last)</p>
-<p>my_dataframe |&gt; select(fname = First, lname = Last, term, grade,
-passed)</p>
-</div>
-<p><br />
-</p>
-</div>
-<div id="but-wait.-cant-chatgpt-just-take-care-of-this-for-me"
-class="slide section level1 subsection">
-<h1 class="subsection"><span class="subsecttitle-pre"></span><span
-class="subsecttitle-pre" style="line-height: normal;">But wait.
-</br></br/>Can’t ChatGPT just take<br/>care of this <br/>for
-me?</span></h1>
-</div>
-<div id="maybe" class="slide section level1 hidetitle">
-<h1 class="hidetitle">Maybe</h1>
-<table style='max-width:640px; margin:4em auto; border:none;'><tr style='vertical-align:middle;'><td><img src='images/fairy-godmother-shrek2_202x240.png' style='width:202px; height:240px; box-shadow:none; border-radius:0;'></img></td><td style='text-align:center; font-size:120%; font-style:normal; font-family:Comic Sans MS, Comic Sans, cursive; line-height:180%; padding:1em; color:black;'>Let's explore that, shall we...</td></tr></table>
-<p><br />
-</p>
-</div>
-<div id="what-are-your-goals-for-using-genai"
-class="slide section level1">
-<h1>What Are Your Goals for Using GenAI?</h1>
-<ul class="incremental">
-<li>To get working code quickly<br />
-</li>
-<li>To improve my code</li>
-<li>To figure out my workflow</li>
-<li>As a really nice search engine; to look things up<br />
-</li>
-<li><strong>To learn R</strong><br />
-</li>
-</ul>
-<p><br />
-</p>
-<ul class="incremental">
-<li style="list-style:none; margin-left:4em;">
-GenAI tools can do <strong>all</strong> of these things.<br/><br/>But
-<strong>how</strong> you use GenAI tools depends on your goals.
-</li>
-</ul>
-</div>
-<div id="learning-r-with-genai" class="slide section level1">
-<h1>Learning R with GenAI</h1>
-<img src="images/cetinkaya-rundel-post-ai-tools_794x393.png"
-class="centerme" style="border: 1px solid gray; padding:5px;" />
-<center>
-<a href="https://www.tidyverse.org/blog/2025/04/learn-tidyverse-ai/"
-class="uri">https://www.tidyverse.org/blog/2025/04/learn-tidyverse-ai/</a>
-</center>
-<p><em>Highlights</em></p>
-<div class="compact">
-<ul>
-<li>ChatGPT will give you code.<br />
-</li>
-<li>It may or may not work.<br />
-</li>
-<li>It may or may not be good code (often not).</li>
-<li>You should always cross-check with the documentation.<br />
-</li>
-</ul>
-</div>
-<p><br />
-</p>
-<div
-style="text-align:center; font-style:italic; font-weight:700; font-size:120%;">
-<p>“Use code completion tools sparingly if you’re a new user.”</p>
-</div>
-</div>
-<div id="suggestions-for-using-genai-to-learn-r"
-class="slide section level1">
-<h1>Suggestions for Using GenAI to <u>Learn</u> R</h1>
-<div class="indented2">
-<ul>
-<li>ChatGPT is good for getting starter code, discovering functions,
-arguments, solving a simple, well-defined tasks, etc.<br />
-</li>
-<li>Break tasks into smaller steps.<br />
-</li>
-<li>If you’re goal is to <strong>learn</strong>, ask a series of
-questions as though you were in Office Hours.<br />
-</li>
-<li>Be wary of code you don’t understand. And always test it.<br />
-</li>
-<li><strong>The more you understand the fundamentals of R, the better
-you can <em>evaluate</em> and <em>learn from</em> GenAI.</strong></li>
-</ul>
-</div>
-<p><br />
-</p>
 <!-------
-*Other Tips*
-  
-:::{.compact}
-- Claude is good at code   
-- Give models the ability to read R package documentation using the Model Context Protocol
-([source](https://www.simonpcouch.com/blog/2025-07-17-claude-code-2/))  
-- Some people like the GenAI code-completion features in IDEs  
-:::
-
-\
------>
+Example:
+st_scores_tbl |> select(starts_with("Quiz"))
+help("dplyr_tidy_select")
+---->
+<div class="centerme">
+<p>More info:<br />
+<a href="https://tidyselect.r-lib.org/"
+class="uri">https://tidyselect.r-lib.org/</a></p>
 </div>
-<div id="what-are-your-best-practices"
-class="slide section level1 subsection">
-<h1 class="subsection"><span class="subsecttitle-pre"></span><span
-class="subsecttitle-pre" style="line-height: normal;">What are <span
-style="text-decoration:underline;">your</span> best
-practices?</span></h1>
+</div>
+<div id="data-file-formats" class="slide section level1">
+<h1>Data File Formats</h1>
+<p>There are better options for storing data than csv.</p>
+<div class="indented1 singlespace">
+<ul>
+<li>RDS - R's native format</li>
+<li>TSV - tab-separated values</li>
+<li>Feather - column based, binary, cross-platform</li>
+<li>Parquet - column based, binary, cross-platform</li>
+<li>DuckDB, sqlite, PostgresSQL, MySQL - relational databases</li>
+</ul>
+</div>
 </div>
 <div id="group-and-summarize" class="slide section level1">
 <h1>Group and Summarize</h1>
@@ -1287,7 +1234,7 @@ can deal with that by passing a named vector as the <em>by</em>
 argument. See below.</p>
 </div>
 <!--- tip --->
-<p>To illustrate a table join, we’ll first import a csv with some fake
+<p>To illustrate a table join, we'll first import a csv with some fake
 data about the genetics of different iris species:</p>
 <div class="indented2 indented2r">
 <div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" tabindex="-1"></a><span class="co"># Create a data frame with additional info about the three IRIS species</span></span>
@@ -1349,52 +1296,12 @@ pass a named character vector as the <code>by</code> argument. A named
 vector is a vector whose elements have been assigned names. You can
 construct a named vector with <code>c()</code>.</p>
 <p><img src="images/table_join02_820x442x256.png" /></p>
-<p>For example if the join column was named ‘<em>SpeciesName</em>’ in
-<em>x</em>, and just ‘<em>Species</em>’ in <em>y</em>, your expression
+<p>For example if the join column was named '<em>SpeciesName</em>' in
+<em>x</em>, and just '<em>Species</em>' in <em>y</em>, your expression
 would be:</p>
 <div class="indented2">
 <strong><code>left_join(x, y, by = c("SpeciesName" = "Species"))</code></strong>
 </div>
-<p><br />
-</p>
-</div>
-<div id="reshaping-data" class="slide section level1">
-<h1>Reshaping Data</h1>
-<p><img src="images/tidyr_240x277.png"
-style="width:140px; float:right;" /></p>
-<p><em>Reshaping</em> data includes:</p>
-<div class="compact">
-<ul>
-<li>turning rows into columns (aka pivot tables, cross tab query)<br />
-</li>
-<li>turning columns into rows</li>
-</ul>
-</div>
-<p>The go-to Tidyverse package for reshaping data frames is <a
-href="https://tidyr.tidyverse.org" target="_blank"
-rel="noopener"><tt><strong>tidyr</strong></tt></a></p>
-<p><br />
-</p>
-<div class="centerblock">
-<p><a href="https://rawgit.com/rstudio/cheatsheets/master/tidyr.pdf"
-target="_blank" rel="noopener"><img
-src="images/tidyr_cheatsheet_600x464x256.png"
-style="border:1px solid grey;" /></a></p>
-</div>
-<p><br />
-</p>
-</div>
-<div id="pivot-functions" class="slide section level1">
-<h1>Pivot Functions</h1>
-<div class="indented2" style="text-align:center;">
-<p><em><code>pivot_longer()</code></em><br />
-<img src="images/pivot_longer_566x212x256.png" /></p>
-<p><em><code>pivot_wider()</code></em><br />
-<img src="images/pivot_wider_674x336x256.png" /></p>
-</div>
-<p>More info and examples in the tidyr <a
-href="https://tidyr.tidyverse.org/articles/pivot.html" target="_blank"
-rel="noopener"><strong>Pivoting Vignette</strong></a></p>
 <p><br />
 </p>
 <p><br />
@@ -1408,7 +1315,6 @@ and:</p>
 <ul>
 <li>group &amp; summarize</li>
 <li>joins</li>
-<li>reshape (i.e., make our data tidy!)</li>
 </ul>
 </div>
 <div style="text-align:center; font-family:monospace; font-size:150%;">

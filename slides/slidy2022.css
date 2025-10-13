@@ -189,7 +189,7 @@ span.fakecode {
   line-height: 150%;
 }
 
-.centerblock {
+.centerblock, .centerme {
   text-align:center;
   margin: 0 auto;
 }

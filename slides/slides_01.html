@@ -8,7 +8,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="author" content=" October 10, 2025 Andy Lyons  " />
   <meta name="copyright" content="<a href='../index.html' style='color:#444; margin-left:2em;'>Home</a><a href='https://ucanr-igis.github.io/DataWranglingR/' style='color:#444; margin-left:2em;'>https://ucanr-igis.github.io/DataWranglingR/</a>"/>
-  <title>Data Wrangling</title>
+  <title>Data Wrangling Pt1</title>
   <style type="text/css">
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
@@ -259,6 +259,27 @@ target="_blank">https://ucanr-igis.shinyapps.io/pist_gdd/</a></p>
 <div id="about-you..." class="slide section level1">
 <h1>About You...</h1>
 </div>
+<div id="workshop-goals" class="slide section level1">
+<h1>Workshop Goals</h1>
+<div class="li-single compact">
+<ol style="list-style-type: decimal">
+<li>Gain a better understanding of the fundamentals of data
+wrangling<br />
+</li>
+<li>Be able to find the packages and functions that can do what you
+need<br />
+</li>
+<li>Grow your library of working code recipes<br />
+</li>
+<li>Be better equipped to trouble-shoot your code</li>
+<li>Come out slightly higher on the learning curve!</li>
+</ol>
+</div>
+<p><img src="images/mountain_climbing_600x240x256.png"
+style="display:block; margin:1em auto; border:none;" /></p>
+<p><br />
+</p>
+</div>
 <div id="data-wrangling-what-do-we-mean" class="slide section level1">
 <h1>Data Wrangling: What do we mean?</h1>
 <p style="text-align:center; font-style:italic; font-weight:bold; line-height:180%;">
@@ -366,9 +387,15 @@ Strategy</span></h1>
 </div>
 <div id="what-is-tidy-data" class="slide section level1">
 <h1>What is "tidy data"?</h1>
-<p>R functions like tidy data!</p>
 <p><img src="images/tidy_data_1260x435x256.png"
 style="display:block; margin:1em auto; border:none;" /></p>
+<p><br />
+</p>
+<div class="centerme">
+<p>Wickham, H. (2014). <em>Tidy data</em>. Journal of statistical
+software, 59, 1-23. <a href="https://doi.org/10.18637/jss.v059.i10"
+class="uri">https://doi.org/10.18637/jss.v059.i10</a></p>
+</div>
 </div>
 <div id="are-these-data-tidy" class="slide section level1">
 <h1>Are these data 'tidy'?</h1>
@@ -861,7 +888,7 @@ the dataframe and inherited from <code>aes()</code><br />
 <span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">color =</span> <span class="st">&quot;navy&quot;</span>, <span class="at">fill =</span> <span class="st">&quot;yellow&quot;</span>, <span class="at">size =</span> <span class="fl">1.5</span>)</span></code></pre></div>
 <pre><code>## Warning: Removed 2 rows containing non-finite outside the scale range
 ## (`stat_boxplot()`).</code></pre>
-<p><img src="slides_01_files/figure-slidy/unnamed-chunk-45-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="slides_01_files/figure-slidy/unnamed-chunk-46-1.png" width="768" style="display: block; margin: auto;" /></p>
 </div>
 <p><br />
 </p>
@@ -876,20 +903,24 @@ graphic elements:</p>
 <span id="cb23-4"><a href="#cb23-4" tabindex="-1"></a>  <span class="fu">geom_label</span>(<span class="at">x =</span> <span class="dv">3</span>, <span class="at">y =</span> <span class="dv">58</span>, <span class="at">label =</span> <span class="st">&quot;Gentoo penguins </span><span class="sc">\n</span><span class="st"> are just the best!&quot;</span>)</span></code></pre></div>
 <pre><code>## Warning: Removed 2 rows containing non-finite outside the scale range
 ## (`stat_boxplot()`).</code></pre>
-<p><img src="slides_01_files/figure-slidy/unnamed-chunk-46-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="slides_01_files/figure-slidy/unnamed-chunk-47-1.png" width="768" style="display: block; margin: auto;" /></p>
 </div>
 <p><br />
 </p>
 </div>
 <div id="exercise-1" class="slide section level1">
 <h1>Exercise 1</h1>
+<div
+style="display:flex; flex-flow:row wrap; justify-content:start; align-items:start; column-gap:20px; row-gap:20px;">
+<div>
 <p>In this exercise, we will:</p>
 <div class="indented1 singlespace">
 <ul>
-<li>import some messy Excel data</li>
+<li>import some messy survey data from Excel<br />
+</li>
 <li>import, clean, and visualize weekly pop-quiz scores</li>
 </ul>
-<div style="margin-left:4em;">
+<div style="margin-left:1em;">
 <ul>
 <li>improve column names<br />
 </li>
@@ -907,10 +938,17 @@ graphic elements:</p>
 </ul>
 </div>
 </div>
+</div>
+<div>
+<p><img src="images/students-taking-quiz_540x360.jpg" /></p>
+</div>
+</div>
+<!---- side-by-side container ---->
+<div style="text-align:center;">
 <p>This exercise will be done in an <em>Quarto Notebook</em>!</p>
-<div style="text-align:center; font-family:monospace; font-size:150%;">
-<p><a
-href="https://posit.cloud/content/11134060">https://posit.cloud/content/11134060</a></p>
+<p><span style="font-family:monospace; font-size:150%;"> <a
+href="https://posit.cloud/content/11134060">https://posit.cloud/content/11134060</a>
+</span></p>
 </div>
 </div>
 <div id="break" class="slide section level1">
@@ -943,8 +981,7 @@ style="display:block; margin:1em auto; border:none;" /></p>
 <li>one-by-one: use <code>rename()</code> or <code>select()</code><br />
 </li>
 <li>apply a function to several columns at once: use
-<code>rename_with()</code> or <code>rename_all()</code><br />
-</li>
+<code>rename_with()</code></li>
 </ul>
 </div>
 <p><strong>Subsetting rows and columns</strong></p>
@@ -1189,34 +1226,15 @@ frame</em></p>
 </div>
 <div id="joining-tables" class="slide section level1">
 <h1>Joining Tables</h1>
-<h2 id="dplyr-join-functions"><code>dplyr</code> join functions</h2>
-<table class="tbl_compact">
-<tbody>
-<tr>
-<td style="text-align:left;width: 12em; ">
-join data frames on a column
-</td>
-<td style="text-align:left;font-family: monospace;">
-left_join(), right_join(), inner_join()
-</td>
-</tr>
-<tr>
-<td style="text-align:left;width: 12em; ">
-stack data frames
-</td>
-<td style="text-align:left;font-family: monospace;">
-bind_rows()
-</td>
-</tr>
-</tbody>
-</table>
-<p><br />
-</p>
 <h2 id="join-tables-on-a-common-column">Join tables on a common
 column</h2>
-<p><img src="images/join-table_890x220x256.png"
-style="display:block; margin:0 auto;" /></p>
-<p><img src="images/table_join01_820x442x256.png" /></p>
+<p><img src="images/left_join_01_780x540.png"
+style="margin-left:1em;" /></p>
+<p><br />
+</p>
+<p><img src="images/left_join_02_1170x315.png"
+style="margin-left:1em;" /></p>
+<p>The result of a join is <strong>additional columns</strong>.</p>
 <p>To join two data frames based on a common column, you can use:</p>
 <div class="indented1">
 <p><tt><strong>left_join(<em>x</em>, <em>y</em>,
@@ -1225,13 +1243,15 @@ style="display:block; margin:0 auto;" /></p>
 <p>where <em>x</em> and <em>y</em> are data frames, and <em>by</em> is
 the name of a column they have in common.</p>
 <div class="tip">
+<p>Join columns must be the same data type (i.e., both numeric or both
+character).</p>
 <p>If there is only one column in common, and if it has the same name in
 both data frames, you can omit the <em>by</em> argument.</p>
-<p>If the common column is named differently in the two data frames, you
-can deal with that by passing a named vector as the <em>by</em>
-argument. See below.</p>
+<p>The <em>by</em> argument can take the <code>join_by()</code> for more
+complex cases (e.g., join columns have different names)</p>
 </div>
 <!--- tip --->
+<h2 id="simple-join-example">Simple Join Example</h2>
 <p>To illustrate a table join, we'll first import a csv with some fake
 data about the genetics of different iris species:</p>
 <div class="indented2 indented2r">
@@ -1274,31 +1294,6 @@ data about the genetics of different iris species:</p>
 ## 8                  0.8
 ## 9                  0.8
 ## 10                 0.8</code></pre>
-</div>
-<p><br />
-</p>
-<div class="infobox">
-<p>If you need to join tables on multiple columns, add additional column
-names to the <code>by</code> argument.</p>
-<p>Join columns must be the same data type (i.e., both numeric or both
-character).</p>
-<p>There are several variants of <code>left_join()</code>, the most
-common being <strong><code>right_join()</code></strong> and
-<strong><code>inner_join()</code></strong>. See help for details.</p>
-</div>
-<!--- info-box --->
-<h2 id="joining-tables-when-the-column-name-is-different">Joining Tables
-When the Column Name is Different</h2>
-<p>If the join column is named differently in the two tables, you can
-pass a named character vector as the <code>by</code> argument. A named
-vector is a vector whose elements have been assigned names. You can
-construct a named vector with <code>c()</code>.</p>
-<p><img src="images/table_join02_820x442x256.png" /></p>
-<p>For example if the join column was named '<em>SpeciesName</em>' in
-<em>x</em>, and just '<em>Species</em>' in <em>y</em>, your expression
-would be:</p>
-<div class="indented2">
-<strong><code>left_join(x, y, by = c("SpeciesName" = "Species"))</code></strong>
 </div>
 <p><br />
 </p>

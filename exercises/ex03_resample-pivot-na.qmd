@@ -1,0 +1,350 @@
+---
+title: "Data Wrangling Exercise 3"
+subtitle: "Resample columns, Pivot Wide-to-Long, Manage Missing Values"
+format:
+  html:
+    df-print: paged
+    code-link: true
+    toc: true
+    toc-expand: 3
+editor: source
+---
+
+In this exercise, we'll continue to work with the pop-quiz data using the following techniques:
+
+- resampling character values using a related table    
+- pivoting from wide-to-long  
+- global summaries and filters    
+- three ways to manage missing values  
+
+## Setup
+
+Load the packages we'll be using:
+
+```{r chunk01, message = FALSE}
+library(readr)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(stringr)
+library(lubridate)
+library(conflicted)
+conflicts_prefer(
+  dplyr::select,
+  dplyr::filter,
+  dplyr::arrange
+)
+```
+
+We'll continue to work with the pop-quiz data we saw in the first exercise:
+
+```{r chunk02}
+ss_fn <- here::here("./exercises/data/student_scores.tsv")
+ss_nn_tbl <- readr::read_tsv(file = ss_fn, show_col_types = FALSE) |> 
+  rename_all(str_to_lower) |>                       
+  rename_all(~ str_replace_all(., " ", "_"))
+head(ss_nn_tbl)
+```
+
+## Resample the `year` Column
+
+Let's look at the values of the `year` column.
+
+```{r chunk03}
+ss_nn_tbl |> 
+  group_by(year) |> 
+  summarize(num_rows = n())
+```
+\
+
+Suppose we want to **replace these codes** with their corresponding **labels** (i.e., 'sophomore', 'junior', 'senior'). An easy way to add labels for codes or abbreviations is:
+
+1. Import (or create) a data frame containing the codes and their labels
+2. Join the data frames together based on the matching codes
+
+**Step 1:** Import a table with the codes and their labels
+
+```{r chunk04}
+year_codes_tbl <- here::here("exercises/data/year_codes.tsv") |> 
+  read_tsv(show_col_types = FALSE)
+
+year_codes_tbl
+```
+
+**Step 2:** Join the labels table to the data:
+
+```{r chunk05}
+ss_year_lbl_tbl <- ss_nn_tbl |> 
+  left_join(year_codes_tbl, by = "year") |> 
+  select(name, year, year_lbl)
+
+ss_year_lbl_tbl |> slice(1:20)
+```
+
+\
+
+## Randomly Divide the Data into Training and Validation Sets
+
+It's very common in research to divide data into 'training' and 'validation' sets. The 'training' data is use to train a regression model, after which the validation set is used to assess the accuracy of the model.
+
+Here, we create a column called 'set', and populate it such that ~80% of the rows are tagged for training, and 20% for validation.
+
+```{r chunk06}
+ss_trainvalid_tbl <- ss_nn_tbl |> 
+  mutate(set = sample(c("training", "validation"), 
+                      size = nrow(ss_nn_tbl),
+                      replace = TRUE, 
+                      prob = c(0.8, 0.2))) |> 
+  relocate(set, .after = name) 
+
+head(ss_trainvalid_tbl)
+
+## See how close we got to 80/20
+table(ss_trainvalid_tbl$set)
+```
+
+\
+
+### CHALLENGE
+
+1) Modify the 'set' column such that all the students in Discussion Sections 1-3 are used for model fitting, and Discussion Section 4 is used as the validation dataset.
+
+```{r chunk07}
+## Your answer here
+
+```
+
+\
+
+## Reshape the Data
+
+In Part I, we only worked with `quiz_01`. But there are 17 other quizzes!
+
+Wouldn't it be nice if we could:
+
+- compare the distribution of scores across all quizzes  
+- compute for each student the average of all quiz scores (i.e., for their final grade)  
+
+All of the above would be a lot easier to do if we **make these data tidy!**
+
+In this case, to make the data tidy we have to transform it from its current **wide** format to a **long** format. We can do with this with `tidyr::pivot_longer()` with the following arguments:
+
+- `cols` - a tidyselect expression identifying the columns we want turn into new rows  
+- `names_to` - the name of a new column where the old columns names should go (because those columns are going to disappear)
+- `values_to` - the name of a new column for the values of old columns
+
+```{r chunk08}
+ss_long_tbl <- ss_nn_tbl |> 
+  pivot_longer(
+    cols = starts_with("quiz"),
+    names_to = "quiz",
+    values_to = "score"
+  )
+```
+
+See what we got:
+
+```{r chunk09}
+dim(ss_long_tbl)
+slice(ss_long_tbl, 1:20)
+```
+
+\
+
+## Visualize and Summarise all of the Quizes
+
+Now that the data are tidy, we can make a box-and-whiskers plots for all of the quizzes:
+
+```{r chunk10}
+ggplot(ss_long_tbl, aes(y = score, x = quiz)) +
+  geom_boxplot() +
+  labs(title = "Quiz Scores")
+```
+
+\
+
+Something's off with Quiz 7! Let's remove that one from our dataset.
+
+```{r chunk11}
+ss_cln_tbl <- ss_long_tbl |> 
+  filter(quiz != "quiz_07")
+dim(ss_cln_tbl)
+```
+
+Now view the box plots again:
+
+```{r chunk12}
+ggplot(ss_cln_tbl, aes(y = score, x = quiz)) +
+  geom_boxplot() +
+  labs(title = "Quiz Scores")
+```
+
+Much better!
+
+## Compute Average Scores
+
+Next, let's compute the average score per student
+
+```{r chunk13}
+ss_cln_tbl |> 
+  group_by(name) |> 
+  summarize(avg_score = mean(score, na.rm = TRUE))
+```
+
+\
+
+### CHALLENGE
+
+2) Compute the overall average (all quizzes, all students) for each treatment group.
+
+```{r chunk14}
+## Your answer here
+
+```
+
+## Work with Missing Values
+
+Let's begin by summarizing the number and proportion of missing values per student:
+
+```{r chunk15}
+ss_stdnt_na_tbl <- ss_cln_tbl |> 
+  group_by(name) |> 
+  summarize(num_missing = sum(is.na(score)),
+            prp_missing = num_missing / n()) 
+
+head(ss_stdnt_na_tbl)
+```
+
+It will be easier to see the distribution as a histogram:
+
+```{r chunk16}
+ss_stdnt_na_tbl |> 
+  ggplot(aes(x = prp_missing)) +
+  geom_histogram() +
+  labs(title = "Proportion of Missing Quiz Scores per Student")
+```
+
+### CHALLENGE
+
+3) How many students completed all the quizzes?
+
+```{r chunk17}
+## Your answer here
+
+```
+
+\
+
+4) Which quiz had the most missing scores?
+
+```{r chunk18}
+## Your answer here
+
+```
+
+## Drop NAs
+
+One option is simply to drop any row where the score is `NA`. We can do this with `tidyr::drop_na()`.
+
+```{r chunk19}
+ss_nomissing_tbl <- ss_cln_tbl |> drop_na(score)
+
+## Compare the number of rows before and after dropping the NAs
+nrow(ss_cln_tbl); nrow(ss_nomissing_tbl)
+```
+
+\
+
+## Replace NAs with 0
+
+We can easily replace NAs with a constant like `0` using `tidyr::replace_na()`.
+
+```{r chunk20}
+ss_cln_tbl |> replace_na(list(score = 0)) |> slice(1:20)
+```
+
+### CHALLENGE
+
+5) How does replacing NA's with 0's affect the overall class average?
+
+```{r chunk21}
+## Your answer here
+
+```
+
+## Replace NA's with Students' Average Score
+
+Another option might be to replace the NAs with the average of all the other student's quiz scores. We can do this by:
+
+- computing students' average scores in a separate table
+- joining the average score table to the data
+- replacing NAs with the average score
+
+**Step 1:** Construct a table of each student's overall average scores on the quizzes they took.
+
+```{r chunk22}
+ss_std_avg_tbl <- ss_cln_tbl |> 
+  group_by(name) |> 
+  summarize(overall_avg = mean(score, na.rm = TRUE)) 
+
+head(ss_std_avg_tbl)
+```
+
+\
+
+**Step 2:** Next, join the overall average table to the data:
+
+```{r chunk23}
+ss_scores_plus_avg_tbl <- ss_cln_tbl |> 
+  left_join(ss_std_avg_tbl, by = "name") |> 
+  select(name, quiz, score, overall_avg)
+
+ss_scores_plus_avg_tbl |> slice(1:20)
+
+```
+
+\
+
+**Step 3.** Replace the NAs with the students' average using `mutate()`:
+
+```{r chunk24}
+ss_na2avg_tbl <- ss_scores_plus_avg_tbl |> 
+  mutate(score = if_else(is.na(score), overall_avg, score))
+
+ss_na2avg_tbl |> slice(1:40)
+```
+
+\
+
+How does this change the overall average?
+
+```{r chunk25}
+ss_cln_tbl |> pull(score) |> mean(na.rm = TRUE)
+ss_na2avg_tbl |> pull(score) |> mean(na.rm = TRUE)
+```
+
+\
+
+### CHALLENGE (Homework)
+
+6) Drop students who missed more than 40% of the quizzes.
+
+```{r chunk26}
+## Your answer here
+
+```
+
+\
+
+7) What do these data say about the theory that coming to class supports learning?
+
+```{r chunk27}
+## Your answer here
+
+```
+
+\
+
+## DONE!
+
+Remember to render your Quarto document so you have a pretty HTML file to keep for future reference.

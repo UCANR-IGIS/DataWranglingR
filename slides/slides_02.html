@@ -430,12 +430,12 @@ you can <em>evaluate</em> and <em>learn from</em> GenAI.</strong></li>
 \
 ----->
 </div>
-<div id="what-are-your-best-practices"
+<div id="what-are-your-best-practices-for-using-genai-tools"
 class="slide section level1 subsection">
 <h1 class="subsection"><span class="subsecttitle-pre"></span><span
 class="subsecttitle-pre" style="line-height: normal;">What are <span
-style="text-decoration:underline;">your</span> best
-practices?</span></h1>
+style="text-decoration:underline;">your</span> best practices for using
+GenAI tools?</span></h1>
 </div>
 <div id="reshaping-data" class="slide section level1">
 <h1>Reshaping Data</h1>
@@ -510,19 +510,21 @@ span.gray {
   color:gray;
 }
 </style>
-<h2 id="step-1-do-i-have-missing-values">Step 1: Do I have missing
-values?</h2>
+<h2 id="question-1-do-i-have-missing-values">Question 1: Do I have
+missing values?</h2>
 <div class="indented2 indented2r">
-<p>How are missing values encoded?</p>
-<div class="indented1">
-<ul>
-<li>-99</li>
-<li>""</li>
-<li><code>NA</code></li>
-</ul>
+<p>How are missing values <strong>encoded</strong>?</p>
+<div class="indented2">
+<p><code>-99</code><br />
+""<br />
+<code>NA</code></p>
 </div>
+<h2 id="question-2-how-many-missing-values-do-i-have">Question 2: How
+many missing values do I have?</h2>
+<div class="indented2">
 <p><code>summary()</code></p>
 <p><code>is.na()</code>, <code>!is.na()</code></p>
+</div>
 </div>
 <p><br />
 </p>
@@ -547,7 +549,15 @@ style="margin-left:1em;" /></p>
 </div>
 <p><br />
 </p>
-<h3 id="option-3-replace-missing-values-with-a-constant">Option 3:
+<h3 id="option-3-fill-up-down">Option 3: Fill up / down</h3>
+<div class="indented2">
+<p><img src="images/na_fill-up-down_272x162.png"
+style="margin-left:1em;" /></p>
+<p><span class="mono">tidyr::fill()</span></p>
+</div>
+<p><br />
+</p>
+<h3 id="option-4-replace-missing-values-with-a-constant">Option 4:
 Replace missing values with a constant</h3>
 <div class="indented2">
 <p><img src="images/na_replace-constant_268x162.png"
@@ -559,21 +569,13 @@ if_else(…)</span><span class="gray"> )</span></span></p>
 </div>
 <p><br />
 </p>
-<h3 id="option-4-replace-missing-values-with-another-column">Option 4:
+<h3 id="option-5-replace-missing-values-with-another-column">Option 5:
 Replace missing values with another column</h3>
 <div class="indented2">
 <p><span class="mono"><span class="gray">mutate( </span>new_col =
 if_else(…)</span><span class="gray"> )</span></span></p>
 <p><span class="mono"><span class="gray">mutate( </span>new_col =
 coalesce(…)</span><span class="gray"> )</span></span></p>
-</div>
-<p><br />
-</p>
-<h3 id="option-5-fill-up-down">Option 5: Fill up / down</h3>
-<div class="indented2">
-<p><img src="images/na_fill-up-down_272x162.png"
-style="margin-left:1em;" /></p>
-<p><span class="mono">tidyr::fill()</span></p>
 </div>
 <p><br />
 </p>
@@ -611,7 +613,7 @@ style="display:flex; flex-flow:row wrap; justify-content:start; align-items:star
 <p>Warm up:</p>
 <div class="indented1 singlespace">
 <ul>
-<li>resample character values using a related table<br />
+<li>resample a character column using values from a related table<br />
 </li>
 <li>divide data into training and validation</li>
 </ul>
@@ -654,6 +656,7 @@ style="display:block; margin:1em auto; border:none;" /></p>
 <h2 id="splitting-tables">Splitting Tables</h2>
 <h2 id="splitting-variable-width-columns">Splitting Variable Width
 Columns</h2>
+<h2 id="working-with-dates">Working with Dates</h2>
 <p><br />
 </p>
 </div>
@@ -668,7 +671,10 @@ Columns</h2>
 </li>
 <li>split variable width columns<br />
 </li>
-<li>pivot from long-to-wide</li>
+<li>pivot from long-to-wide<br />
+</li>
+<li>add the date each quiz was given</li>
+<li>summarize the data using dates and date parts</li>
 </ul>
 </div>
 <div style="text-align:center;">

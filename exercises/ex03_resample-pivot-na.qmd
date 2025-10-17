@@ -62,12 +62,16 @@ Suppose we want to **replace these codes** with their corresponding **labels** (
 1. Import (or create) a data frame containing the codes and their labels
 2. Join the data frames together based on the matching codes
 
-**Step 1:** Import a table with the codes and their labels
+**Step 1:** Create a tibble with the codes and their labels:
 
 ```{r chunk04}
-year_codes_tbl <- here::here("exercises/data/year_codes.tsv") |> 
-  read_tsv(show_col_types = FALSE)
-
+year_codes_tbl <- tribble(
+  ~year, ~year_lbl,
+  "FRS", "Freshman",
+  "SPH", "Sophomore",
+  "JNR", "Junior",
+  "SNR", "Senior"
+)
 year_codes_tbl
 ```
 
